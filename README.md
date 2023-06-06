@@ -3,6 +3,11 @@
 - Delay rendering of non-important components on cacheable pages
 - Use bundles on non-cacheable pages.
 
+# PageSpeed scores with Luma theme
+
+![Mobile](https://marketplace.magento.com/media/catalog/product/f/e/fec4_image4.png?store=default&image-type=image&fit=bounds)
+![Desktop](https://marketplace.magento.com/media/catalog/product/3/a/3a7a_image10.png?store=default&image-type=image&fit=bounds)
+
 # External links
 
 [Magento Marketplace](https://marketplace.magento.com/pure-mashiro-magento2-bundlejs.html)
