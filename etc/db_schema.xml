@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!--
+  ~ Copyright Pure Mashiro. All rights reserved.
+  ~ @author Mana Light
+  -->
+<schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
+    <table name="mashiro_bundle_by_type" resource="default" engine="innodb" comment="Mashiro Bundle By Type">
+        <column name="entity_id" xsi:type="int" unsigned="true"
+                nullable="false" identity="true" comment="Entity Id"/>
+        <column name="type" xsi:type="varchar" nullable="false" length="255" comment="Type"/>
+        <column name="bundle" xsi:type="text" nullable="true" comment="Bundle"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="unique" referenceId="MASHIRO_BUNDLE_BY_TYPE_TYPE">
+            <column name="type"/>
+        </constraint>
+    </table>
+    <table name="mashiro_bundle_by_page" resource="default" engine="innodb" comment="Mashiro Bundle By Page">
+        <column name="entity_id" xsi:type="int" unsigned="true"
+                nullable="false" identity="true" comment="Entity Id"/>
+        <column name="type_id" xsi:type="int" unsigned="true" nullable="false" comment="Type ID"/>
+        <column name="full_action_name" xsi:type="varchar" nullable="false" length="255" comment="Full Action Name"/>
+        <column name="bundle" xsi:type="text" nullable="true" comment="Bundle"/>
+        <column name="use_in_common" xsi:type="boolean" default="false" comment="Use In Common"/>
+        <column name="enable" xsi:type="boolean" default="false" comment="Enable"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+        <constraint xsi:type="foreign" referenceId="MASHIRO_BUNDLE_BY_PAGE_TYPE_ID_MASHIRO_BUNDLE_BY_TYPE_ENTITY_ID"
+                    table="mashiro_bundle_by_page" column="type_id" referenceTable="mashiro_bundle_by_type"
+                    referenceColumn="entity_id" onDelete="CASCADE"/>
+    </table>
+    <table name="mashiro_bundle_contexts_config" resource="default" engine="innodb" comment="Mashiro Bundle Contexts Config">
+        <column name="entity_id" xsi:type="int" unsigned="true" nullable="false" identity="true" comment="Entity Id"/>
+        <column name="config" xsi:type="text" nullable="true" comment="Config"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="entity_id"/>
+        </constraint>
+    </table>
+</schema>

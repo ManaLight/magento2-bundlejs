@@ -1,0 +1,157 @@
+<!--
+  * Copyright Pure Mashiro. All rights reserved.
+  * @author Mana Light
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="pure_mashiro" translate="label" sortOrder="1000">
+            <label>Pure Mashiro</label>
+        </tab>
+        <section id="bundle_js" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10" translate="label">
+            <label>Bundle Js</label>
+            <tab>pure_mashiro</tab>
+            <resource>PureMashiro_BundleJs::bundle_js</resource>
+            <group id="general" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="enable" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" type="select">
+                    <label>Enable</label>
+                    <comment>Enable/disable extension.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="enable_collect_bundle_js" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" type="select">
+                    <label>Enable collect bundle js</label>
+                    <comment>Enable collecting bundle js manually.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="enable_auto_collect" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" type="select">
+                    <label>Enable collect bundle js automatically</label>
+                    <source_model>PureMashiro\BundleJs\Model\Config\Source\Yes</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                        <field id="enable_collect_bundle_js">1</field>
+                    </depends>
+                </field>
+                <field id="auto_collect" translate="label comment" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" type="button">
+                    <label>Collect bundle js automatically</label>
+                    <frontend_model>PureMashiro\BundleJs\Block\System\Config\Form\Field\AutoCollect</frontend_model>
+                    <comment>Please press "Auto" button to start collecting bundle js automatically.</comment>
+                    <depends>
+                        <field id="enable">1</field>
+                        <field id="enable_collect_bundle_js">1</field>
+                        <field id="enable_auto_collect">1</field>
+                    </depends>
+                </field>
+                <field id="manual_collect" translate="label comment" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1" type="button">
+                    <label>Collect bundle js manually</label>
+                    <frontend_model>PureMashiro\BundleJs\Block\System\Config\Form\Field\ManualCollect</frontend_model>
+                    <comment>Please press "Manual" button to start collecting bundle js manually.</comment>
+                    <depends>
+                        <field id="enable">1</field>
+                        <field id="enable_collect_bundle_js">1</field>
+                        <field id="enable_auto_collect">0</field>
+                    </depends>
+                </field>
+                <field id="enable_generate_static_bundle_js" translate="label" sortOrder="40" showInDefault="1" type="select">
+                    <label>Enable generate static bundle js</label>
+                    <comment>Allow generating static bundles when deploying static view files.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                        <field id="enable_collect_bundle_js">0</field>
+                    </depends>
+                </field>
+                <field id="enable_bundle_js_in_storefront" translate="label" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1" type="select">
+                    <label>Enable bundle js in Storefront</label>
+                    <comment>Enable loading bundle js in Storefront.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                        <field id="enable_collect_bundle_js">0</field>
+                    </depends>
+                </field>
+                <field id="disable_bundles_on_static_pages" translate="label" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="1" type="select">
+                    <label>Disable bundles on static pages</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable_bundle_js_in_storefront">1</field>
+                    </depends>
+                </field>
+                <field id="enable_delay_js_execution" translate="label" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="1" type="select">
+                    <label>Enable Delay JavaScript execution</label>
+                    <comment>Enable defer loading bundle js in Storefront.</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
+                </field>
+                <field id="exclude_internal_scripts" translate="label comment" sortOrder="80" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Exclude inline scripts</label>
+                    <tooltip><![CDATA[Please leave it as is<br>OR get an expert to help configure this<br>OR Contact us for the support!]]></tooltip>
+                    <comment>||| seperated. Inline JS scripts which contain one of these scripts will be excluded from delay</comment>
+                    <depends>
+                        <field id="enable_delay_js_execution">1</field>
+                    </depends>
+                </field>
+                <field id="exclude_external_scripts" translate="label comment" sortOrder="90" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Exclude external scripts</label>
+                    <tooltip><![CDATA[Please leave it as is<br>OR get an expert to help configure this<br>OR Contact us for the support!]]></tooltip>
+                    <comment>||| seperated. External JS scripts which have path containing one of these paths will be excluded from delay</comment>
+                    <depends>
+                        <field id="enable_delay_js_execution">1</field>
+                    </depends>
+                </field>
+                <field id="allowed_js_components" translate="label comment" sortOrder="100" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Allowed JS components</label>
+                    <tooltip><![CDATA[Please leave it as is<br>OR get an expert to help configure this<br>OR Contact us for the support!]]></tooltip>
+                    <comment>||| seperated. JS components which won't be delayed.</comment>
+                    <depends>
+                        <field id="enable_delay_js_execution">1</field>
+                    </depends>
+                </field>
+            </group>
+            <group id="custom_path" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Custom paths for auto-collecting bundle js</label>
+                <field id="category" translate="label" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1" type="text">
+                    <label>Category path</label>
+                    <comment><![CDATA[A category path for collecting bundle js automatically.</br>
+                        If this field is empty, system will pick up a random category path.]]></comment>
+                    <validate>no-whitespace</validate>
+                </field>
+                <field id="product" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" type="text">
+                    <label>Product path</label>
+                    <comment><![CDATA[A product path for collecting bundle js automatically.</br>
+                        If this field is empty, system will pick up a random product path.]]></comment>
+                    <validate>no-whitespace</validate>
+                </field>
+                <field id="checkout" translate="label" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1" type="text">
+                    <label>Checkout path</label>
+                    <comment><![CDATA[A checkout path for collecting bundle js automatically.</br>
+                        If this field is empty, system will use default checkout path.]]></comment>
+                    <validate>no-whitespace</validate>
+                </field>
+            </group>
+            <group id="critical_js" translate="label" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Critical JS</label>
+                <field id="deps_common" translate="label comment" sortOrder="10" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Common Dependencies</label>
+                    <tooltip><![CDATA[Please leave it as is<br>OR get an expert to help configure this<br>OR Contact us for the support!]]></tooltip>
+                </field>
+                <field id="deps_cms" translate="label comment" sortOrder="20" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>CMS Dependencies</label>
+                    <tooltip><![CDATA[Please leave it as is<br>OR get an expert to help configure this<br>OR Contact us for the support!]]></tooltip>
+                </field>
+                <field id="deps_category" translate="label comment" sortOrder="30" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Category Dependencies</label>
+                    <tooltip><![CDATA[Please leave it as is<br>OR get an expert to help configure this<br>OR Contact us for the support!]]></tooltip>
+                </field>
+                <field id="deps_product" translate="label comment" sortOrder="40" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Product Dependencies</label>
+                    <tooltip><![CDATA[Please leave it as is<br>OR get an expert to help configure this<br>OR Contact us for the support!]]></tooltip>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<!--
+  * Copyright Pure Mashiro. All rights reserved.
+  * @author Mana Light
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="standard">
+        <route id="bundlejs" frontName="bundlejs">
+            <module name="PureMashiro_BundleJs" />
+        </route>
+    </router>
+</config>

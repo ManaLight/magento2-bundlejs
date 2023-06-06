@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+  * Copyright Pure Mashiro. All rights reserved.
+  * @author Mana Light
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\RequireJs\Block\Html\Head\Config">
+        <plugin name="puremashiro_bundlejs_plugin_magento_requirejs_block_html_head_config"
+                type="PureMashiro\BundleJs\Plugin\Magento\RequireJs\Block\Html\Head\ConfigPlugin"/>
+    </type>
+    <type name="PureMashiro\BundleJs\Model\FileManager">
+        <plugin name="puremashiro_bundlejs_plugin_model_filemanagerplugin"
+                type="PureMashiro\BundleJs\Plugin\Model\FileManagerPlugin"/>
+    </type>
+    <type name="Magento\Framework\View\Result\Layout">
+        <plugin name="puremashiro_bundlejs_controller_result_deferinternaljsplugin"
+                type="PureMashiro\BundleJs\Controller\Result\DeferInternalJsPlugin" sortOrder="-3000"/>
+    </type>
+</config>

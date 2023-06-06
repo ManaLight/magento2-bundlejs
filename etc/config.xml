@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!--
+  * Copyright Pure Mashiro. All rights reserved.
+  * @author Mana Light
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <bundle_js>
+            <general>
+                <enable>0</enable>
+                <enable_collect_bundle_js>1</enable_collect_bundle_js>
+                <enable_auto_collect>1</enable_auto_collect>
+                <enable_generate_static_bundle_js>1</enable_generate_static_bundle_js>
+                <enable_bundle_js_in_storefront>1</enable_bundle_js_in_storefront>
+                <disable_bundles_on_static_pages>1</disable_bundles_on_static_pages>
+                <enable_delay_js_execution>1</enable_delay_js_execution>
+                <exclude_internal_scripts>window.oscRoute =</exclude_internal_scripts>
+                <exclude_external_scripts>js/lite-yt-embed</exclude_external_scripts>
+                <allowed_js_components>menu|||tabs|||mage/gallery/gallery|||Magento_Swatches/js/swatch-renderer|||Magento_Swatches/js/catalog-add-to-cart|||Magento_Catalog/js/validate-product|||priceBox|||catalogAddToCart</allowed_js_components>
+            </general>
+        </bundle_js>
+    </default>
+</config>

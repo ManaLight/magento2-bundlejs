@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!--
+  * Copyright Pure Mashiro. All rights reserved.
+  * @author Mana Light
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="PureMashiro\BundleJs\Model\Logger\VirtualDebug" type="Magento\Framework\Logger\Handler\Base">
+        <arguments>
+            <argument name="fileName" xsi:type="string">/var/log/mashiro/bundle_js.log</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="PureMashiro\BundleJs\Model\Logger\VirtualLogger" type="Magento\Framework\Logger\Monolog">
+        <arguments>
+            <argument name="name" xsi:type="string">bundle_js</argument>
+            <argument name="handlers" xsi:type="array">
+                <item name="debug" xsi:type="object"> PureMashiro\BundleJs\Model\Logger\VirtualDebug</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="PureMashiro\BundleJs\Helper\NextPage">
+        <arguments>
+            <argument name="logger" xsi:type="object">PureMashiro\BundleJs\Model\Logger\VirtualLogger</argument>
+        </arguments>
+    </type>
+
+    <type name="PureMashiro\BundleJs\Service\Bundle">
+        <plugin name="puremashiro_bundlejs_plugin_service_bundleplugin"
+                type="PureMashiro\BundleJs\Plugin\Service\BundlePlugin"/>
+    </type>
+    <preference for="PureMashiro\BundleJs\Api\SaveBundleByPageInterface"
+                type="PureMashiro\BundleJs\Model\SaveBundleByPage"/>
+    <type name="Magento\Deploy\Service\Bundle">
+        <plugin name="puremashiro_bundlejs_plugin_magento_deploy_service_bundleplugin"
+                type="PureMashiro\BundleJs\Plugin\Magento\Deploy\Service\BundlePlugin"/>
+    </type>
+    <preference for="PureMashiro\BundleJs\Api\PopulateBundleTypeInterface"
+                type="PureMashiro\BundleJs\Model\PopulateBundleType"/>
+    <preference for="PureMashiro\BundleJs\Api\ClearBundlesInterface"
+                type="PureMashiro\BundleJs\Model\ClearBundles"/>
+    <type name="PureMashiro\BundleJs\Plugin\Magento\Framework\RequireJs\ConfigPlugin">
+        <arguments>
+            <argument name="minifyAdapter" xsi:type="object">jsMinificationAdapter</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\RequireJs\Config">
+        <plugin name="puremashiro_bundlejs_plugin_magento_framework_requirejs_configplugin"
+                type="PureMashiro\BundleJs\Plugin\Magento\Framework\RequireJs\ConfigPlugin"/>
+    </type>
+
+    <type name="PureMashiro\BundleJs\Helper\Config">
+        <arguments>
+            <argument name="criticalDepsByTheme" xsi:type="array">
+                <item name="Sm/smtheme_mobile" xsi:type="array"/>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="PureMashiro\BundleJs\Action\GenerateCriticalJsAssets">
+        <arguments>
+            <argument name="minifyAdapter" xsi:type="object">jsMinificationAdapter</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\Asset\Config">
+        <plugin name="puremashiro_bundlejs_plugin_magento_framework_view_asset_configplugin"
+                type="PureMashiro\BundleJs\Plugin\Magento\Framework\View\Asset\ConfigPlugin"/>
+    </type>
+</config>

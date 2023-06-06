@@ -1,0 +1,10 @@
+<?php
+/** @var \PureMashiro\BundleJs\Block\BundleJs $block */
+?>
+<script excluded-defer="1">
+    require(['jquery', 'Magento_Customer/js/customer-data'], function ($) {
+        var storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
+        storage.removeAll();
+        window.location.href = '<?= $block->getBaseUrl()?>';
+    });
+</script>

@@ -1,0 +1,48 @@
+/*
+ *  Copyright Pure Mashiro. All rights reserved.
+ *  @author Mana Light
+ */
+
+#advanced-bundle-wrapper {
+  position: fixed;
+  bottom: 2em;
+  left: 2em;
+  z-index: 1000;
+  .action {
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+  }
+  .button {
+    color: white;
+    width: 125px;
+    margin-right: 20px;
+    border: 1px solid black;
+    cursor: pointer;
+    background-color: black;
+    a {
+      color: white;
+      text-decoration: none;
+      &:visited {
+        color: white;
+      }
+    }
+  }
+  .inactive {
+    color: red;
+    border: 1px solid red;
+  }
+  .ready {
+    color: orange;
+    border: 1px solid orange;
+  }
+  .active {
+    color: green;
+    border: 1px solid green;
+  }
+  span {
+    border: 1px solid #484848;
+    margin-right: 5px;
+    padding: 6px 12px 6px 12px;
+    text-transform: uppercase;
+  }
+}

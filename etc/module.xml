@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+  * Copyright Pure Mashiro. All rights reserved.
+  * @author Mana Light
+  -->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="PureMashiro_BundleJs">
+        <sequence>
+            <module name="Magento_Deploy"/>
+            <module name="Magento_Theme"/>
+        </sequence>
+    </module>
+</config>

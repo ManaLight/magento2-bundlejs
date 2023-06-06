@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+  * Copyright Pure Mashiro. All rights reserved.
+  * @author Mana Light
+  -->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="content">
+            <block name="collect-bundle"
+                   template="PureMashiro_BundleJs::collect_bundle.phtml"
+                   class="PureMashiro\BundleJs\Block\BundleJs"
+                   ifconfig="bundle_js/general/enable" />
+        </referenceContainer>
+        <referenceBlock name="require.js">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">PureMashiro_BundleJs::theme/page/js/require_js.phtml</argument>
+            </action>
+        </referenceBlock>
+    </body>
+</page>

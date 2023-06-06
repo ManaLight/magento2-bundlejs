@@ -1,0 +1,213 @@
+<?php
+
+use PureMashiro\BundleJs\Model\AutoCollect;
+use PureMashiro\BundleJs\Model\ManualCollect;
+
+/** @var \PureMashiro\BundleJs\Block\BundleJs $block */
+if (!$block->canCollectBundle()) {
+    return;
+}
+$types = $block->getAllBundleTypes();
+$hasEmptyBundlePage = $block->hasEmptyBundlePage($types);
+$designParams = $block->getDesignParams();
+$area = $designParams['area'];
+$theme = $designParams['themeModel']->getThemePath();
+$locale = $designParams['locale'];
+?>
+<div id="advanced-bundle-wrapper">
+    <?php if ($block->canAutoCollect()): ?>
+        <div id="cancel-collect-bundle" class="action" style="display: none;">
+            <span class="button"><strong><a href="<?= $block->getAutoCollectCancellingUrl() ?>"><?= __('Cancel'); ?></a></strong></span>
+            <span class="inactive"><?= __('Auto-collecting is in progress. Please wait...'); ?></span>
+        </div>
+    <?php else: ?>
+        <div id="collect-manual-warper" style="display: none;">
+            <div id="collect-bundle" class="action">
+                <span class="button"><strong><?= __('Collect'); ?></strong></span>
+                <?php foreach ($types as $type): ?>
+                    <span>
+                        <?= $type->getType(); ?>
+                    </span>
+                <?php endforeach; ?>
+            </div>
+            <div id="populate-bundle" class="action">
+                <span class="button"><strong><?= __('Populate'); ?></strong></span>
+                <span><?= __('Common') ?></span>
+            </div>
+            <div id="clear-bundles" class="action">
+                <span class="button"><strong><?= __('Clear'); ?></strong></span>
+                <span class="button"><strong><a href="<?= $block->getManualCollectCancellingUrl() ?>"><?= __('Cancel'); ?></a></strong></span>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
+<script excluded-defer="1">
+    document.addEventListener('DOMContentLoaded', function () {
+        require([
+            'jquery',
+            'mage/cookies'
+        ], function ($) {
+            var aggregateObj = {
+                getRelativePath: function (path) {
+                    var baseUrlLength = require.s.contexts._.config.baseUrl.length;
+                    return path.substr(baseUrlLength);
+                },
+                getTextUrl: function (name) {
+                    var stripReg = /!strip$/i;
+                    return require.toUrl(name.replace(stripReg, ''));
+                },
+                getJsArr: function () {
+                    var jsArr = [];
+                    for (var i = 0; i < $('script[data-requiremodule]').length; i++) {
+                        jsArr.push(jQuery('script[data-requiremodule]')[i].src);
+                    }
+                    return jsArr.map(function (item) {
+                        return this.getRelativePath(item);
+                    }.bind(this));
+                },
+                getHtmlArr: function () {
+                    return Object.keys(require.s.contexts._.defined).filter(function (item) {
+                        return item.indexOf('text!') !== -1
+                    }).map(function (item) {
+                        return this.getTextUrl(item.substr(5));
+                    }.bind(this)).map(function (item) {
+                        return this.getRelativePath(item);
+                    }.bind(this));
+                }
+            };
+
+            var actionObj = {
+                collectBundleAction: function (critical = false) {
+                    var jsArr = aggregateObj.getJsArr(),
+                        htmlArr = aggregateObj.getHtmlArr(),
+                        fullActionName = '<?= $block->getRequest()->getFullActionName(); ?>',
+                        contextsConfig,
+                        bundle;
+
+                    contextsConfig = !critical && fullActionName === 'cms_index_index'
+                        ? JSON.stringify(requirejs.s.contexts._.config) : '-1';
+                    bundle = jsArr.concat(htmlArr);
+
+                    $.ajax({
+                        url: '<?= $block->getUrl('rest/V1/saveBundleByPage') ?>',
+                        type: 'POST',
+                        showLoader: true,
+                        data: JSON.stringify({
+                            fullActionName: fullActionName,
+                            pathInfo: '<?= $block->getRequest()->getOriginalPathInfo(); ?>',
+                            bundle: bundle,
+                            critical: critical,
+                            config: contextsConfig,
+                            area: '<?= $area ?>',
+                            theme: '<?= $theme ?>',
+                            locale: '<?= $locale ?>'
+                        }),
+                        contentType: 'application/json'
+                    }).done(function (result) {
+                        if (result && result.length > 1) {
+                            if (result[1]) {
+                                window.location.href = result[1];
+                            }
+                        }
+                    });
+                },
+                populateBundleAction: function () {
+                    $.ajax({
+                        url: '<?= $block->getUrl('rest/V1/populateBundleType') ?>',
+                        type: 'POST',
+                        showLoader: true,
+                        contentType: 'application/json'
+                    }).done(function (result) {
+                    });
+                },
+                clearBundleAction: function () {
+                    $.ajax({
+                        url: '<?= $block->getUrl('rest/V1/clearBundles') ?>',
+                        type: 'POST',
+                        showLoader: true,
+                        contentType: 'application/json',
+                    }).done(function (result) {
+                    });
+                }
+            };
+
+            <?php if ($block->canAutoCollect()): ?>
+            // Observer js Start
+            var collectBundleIsInProgress = false;
+            function observerHtml() {
+                var clockAutoCollect;
+
+                // Select the node that will be observed for mutations
+                var targetNode = document.querySelector('html');
+
+                // Options for the observer (which mutations to observe)
+                var config = {attributes: true, childList: true, subtree: true};
+
+                // Callback function to execute when mutations are observed
+                var callback = function (mutationsList, observer) {
+                    // Use traditional 'for loops' for IE 11
+                    for (const mutation of mutationsList) {
+                        if (mutation.type === 'childList') {
+                            if (clockAutoCollect) {
+                                clearTimeout(clockAutoCollect);
+                            }
+
+                            clockAutoCollect = setTimeout(function () {
+                                if (collectBundleIsInProgress) {
+                                    return;
+                                }
+
+                                collectBundleIsInProgress = true;
+                                actionObj.collectBundleAction($.mage.cookies.get(phase) === phaseValue2);
+                            }, 3000);
+                        }
+                    }
+                };
+
+                // Create an observer instance linked to the callback function
+                var observer = new MutationObserver(callback);
+
+                // Start observing the target node for configured mutations
+                observer.observe(targetNode, config);
+            }
+            // Observer js End
+
+            // Auto collect bundle Start
+            // If auto collect key is existed, check current page, collect if possible, then travel pages in order
+            var autoCollectKey = '<?= AutoCollect::IDENTIFIER ?>';
+            var phase = '<?= AutoCollect::PHASE ?>';
+            var phaseValue2 = '<?= AutoCollect::PHASE_VALUE_2 ?>';
+            var autoCollectValue = $.mage.cookies.get(autoCollectKey);
+
+            if (autoCollectValue) {
+                $('#cancel-collect-bundle').show();
+                observerHtml();
+            }
+            // Auto collect bundle End
+            <?php else: ?>
+            // Show manual collect actions Start
+            var manualCollectKey = '<?= ManualCollect::IDENTIFIER ?>';
+            var manualCollectValue = $.mage.cookies.get(manualCollectKey);
+
+            if (manualCollectValue) {
+                $('#collect-manual-warper').show();
+            }
+            // Show manual collect actions Stop
+
+            // Event binding Start
+            $('#collect-bundle .button').on('click', function () {
+                actionObj.collectBundleAction();
+            });
+
+            $('#populate-bundle .button').on('click', function () {
+                actionObj.populateBundleAction();
+            });
+
+            $('#clear-bundles .button').on('click', function () {
+                actionObj.clearBundleAction();
+            });
+            // Event binding End
+            <?php endif; ?>
+        });
+    });
+</script>

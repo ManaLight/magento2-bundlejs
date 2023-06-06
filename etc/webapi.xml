@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+  * Copyright Pure Mashiro. All rights reserved.
+  * @author Mana Light
+  -->
+<routes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Webapi:etc/webapi.xsd">
+    <route url="/V1/saveBundleByPage" method="POST">
+        <service class="PureMashiro\BundleJs\Api\SaveBundleByPageInterface" method="execute"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/populateBundleType" method="POST">
+        <service class="PureMashiro\BundleJs\Api\PopulateBundleTypeInterface" method="execute"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+    <route url="/V1/clearBundles" method="POST">
+        <service class="PureMashiro\BundleJs\Api\ClearBundlesInterface" method="execute"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+</routes>

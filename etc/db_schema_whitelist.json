@@ -1,0 +1,36 @@
+{
+    "mashiro_bundle_by_type": {
+        "column": {
+            "entity_id": true,
+            "type": true,
+            "bundle": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MASHIRO_BUNDLE_BY_TYPE_TYPE": true
+        }
+    },
+    "mashiro_bundle_by_page": {
+        "column": {
+            "entity_id": true,
+            "type_id": true,
+            "full_action_name": true,
+            "bundle": true,
+            "use_in_common": true,
+            "enable": true
+        },
+        "constraint": {
+            "PRIMARY": true,
+            "MASHIRO_BUNDLE_BY_PAGE_TYPE_ID_MASHIRO_BUNDLE_BY_TYPE_ENTITY_ID": true
+        }
+    },
+    "mashiro_bundle_contexts_config": {
+        "column": {
+            "entity_id": true,
+            "config": true
+        },
+        "constraint": {
+            "PRIMARY": true
+        }
+    }
+}
