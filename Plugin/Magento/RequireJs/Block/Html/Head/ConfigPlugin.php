@@ -26,6 +26,8 @@ use PureMashiro\BundleJs\Model\TypeMapper;
 
 class ConfigPlugin
 {
+    public const CHECKOUT_ACTION_NAMES = ['checkout_index_index', 'checkout_cart_index'];
+
     /**
      * @var FileManager
      */
@@ -180,6 +182,10 @@ class ConfigPlugin
      */
     public function isEnable(): bool
     {
+        if ($this->isExcluded()) {
+            return false;
+        }
+
         return $this->configHelper->canBundleJsInStorefront() && !$this->assetConfig->isBundlingJsFiles();
     }
 
@@ -231,5 +237,14 @@ class ConfigPlugin
                 $after
             );
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isExcluded(): bool
+    {
+        return $this->configHelper->isDisableOnCheckoutPages()
+            && in_array($this->request->getFullActionName(), self::CHECKOUT_ACTION_NAMES);
     }
 }
