@@ -14,8 +14,13 @@ function deferOuterJsHandler() {
     if (defers.length) {
         var head = document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0];
         defers.forEach(function (defer) {
-            defer.setAttribute('type', 'text/javascript');
-            head.appendChild(defer);
+           var script = document.createElement("script");
+           defer.getAttributeNames().forEach(function (attributeName) {
+               script.setAttribute(attributeName, defer.getAttribute(attributeName));
+               }, this);
+           script.setAttribute('type', 'text/javascript');
+
+           head.appendChild(script);
         });
     }
 }
@@ -64,8 +69,9 @@ function deferInnerJsHandler() {
     if (defers.length) {
         var head = document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0];
         defers.forEach(function (defer) {
-             defer.setAttribute('type', 'text/javascript');
-             head.appendChild(defer);
+             var script = document.createElement("script");
+             script.innerHTML = defer.innerHTML;
+             head.appendChild(script);
         });
     }
 }
