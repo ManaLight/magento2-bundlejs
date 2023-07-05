@@ -24,6 +24,9 @@ use PureMashiro\BundleJs\Model\BundleByType;
 use PureMashiro\BundleJs\Model\FileManager;
 use PureMashiro\BundleJs\Model\TypeMapper;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigPlugin
 {
     public const CHECKOUT_ACTION_NAMES = ['checkout_index_index', 'checkout_cart_index'];
@@ -56,7 +59,7 @@ class ConfigPlugin
     /**
      * @var GenerateCriticalJsAssets
      */
-    private $generateCriticalJsAssets;
+    private $genCritJsAssets;
 
     /**
      * @var Design
@@ -89,12 +92,14 @@ class ConfigPlugin
      * @param Minification $minification
      * @param ConfigHelper $configHelper
      * @param AssetConfig $assetConfig
-     * @param GenerateCriticalJsAssets $generateCriticalJsAssets
+     * @param GenerateCriticalJsAssets $genCritJsAssets
      * @param Design $design
      * @param FileDriver $fileDriver
      * @param RequestInterface $request
      * @param TypeMapper $typeMapper
      * @param LayoutInterface $layout
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FileManager              $fileManager,
@@ -102,7 +107,7 @@ class ConfigPlugin
         Minification             $minification,
         ConfigHelper             $configHelper,
         AssetConfig              $assetConfig,
-        GenerateCriticalJsAssets $generateCriticalJsAssets,
+        GenerateCriticalJsAssets $genCritJsAssets,
         Design                   $design,
         FileDriver               $fileDriver,
         RequestInterface         $request,
@@ -114,7 +119,7 @@ class ConfigPlugin
         $this->minification = $minification;
         $this->configHelper = $configHelper;
         $this->assetConfig = $assetConfig;
-        $this->generateCriticalJsAssets = $generateCriticalJsAssets;
+        $this->genCritJsAssets = $genCritJsAssets;
         $this->design = $design;
         $this->fileDriver = $fileDriver;
         $this->request = $request;
@@ -128,6 +133,11 @@ class ConfigPlugin
      * @param HeadConfig $subject
      * @param mixed $result
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
+     * @TODO: refactor into new functions to reduce the complexity of this one.
      */
     public function afterSetLayout(HeadConfig $subject, $result)
     {
@@ -150,7 +160,9 @@ class ConfigPlugin
 
         if ($this->configHelper->isDisableBundlesOnStaticPages() && $this->layout->isCacheable()) {
             $this->insertCriticalJsAssets($assetCollection, $after);
-        } else {
+        }
+
+        if (!$this->configHelper->isDisableBundlesOnStaticPages() && !$this->layout->isCacheable()) {
             $bundleAssets = $this->fileManager->createBundleJsPool();
             $staticAsset = $this->fileManager->createStaticJsAsset();
             /** @var \Magento\Framework\View\Asset\File $bundleAsset */
@@ -232,7 +244,7 @@ class ConfigPlugin
         $locale = $designParams['locale'];
 
         foreach ($files as $filePath) {
-            $destination = $this->generateCriticalJsAssets->getFileDestination(
+            $destination = $this->genCritJsAssets->getFileDestination(
                 false,
                 $area,
                 $theme,

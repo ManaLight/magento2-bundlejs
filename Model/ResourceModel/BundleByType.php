@@ -16,6 +16,8 @@ class BundleByType extends AbstractDb
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     protected function _construct()
     {

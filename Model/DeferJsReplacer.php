@@ -4,7 +4,7 @@ namespace PureMashiro\BundleJs\Model;
 
 use KubAT\PhpSimple\HtmlDomParser;
 use PureMashiro\BundleJs\Helper\DeferJsReplacer as HelperDeferJsReplacer;
-use PureMashiro\BundleJs\Source\Js as SourceJs;
+use PureMashiro\BundleJs\Source\SourceJs;
 
 defined('MAX_FILE_SIZE') || define('MAX_FILE_SIZE', 1000000);
 

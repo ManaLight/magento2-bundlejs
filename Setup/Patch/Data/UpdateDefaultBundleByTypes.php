@@ -11,7 +11,7 @@ namespace PureMashiro\BundleJs\Setup\Patch\Data;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use PureMashiro\BundleJs\Model\BundleByPageFactory;
 use PureMashiro\BundleJs\Model\ResourceModel\BundleByPage as ResourceBundleByPage;
-use PureMashiro\BundleJs\Model\ResourceModel\BundleByType\CollectionFactory as BundleByTypeCollectionFactory;
+use PureMashiro\BundleJs\Model\ResourceModel\BundleByType\CollectionFactory as bundleByTypeCollec;
 use PureMashiro\BundleJs\Model\TypeMapper;
 
 class UpdateDefaultBundleByTypes implements DataPatchInterface
@@ -27,23 +27,23 @@ class UpdateDefaultBundleByTypes implements DataPatchInterface
     private $resourceBundleByPage;
 
     /**
-     * @var BundleByTypeCollectionFactory
+     * @var bundleByTypeCollec
      */
-    private $bundleByTypeCollectionFactory;
+    private $bundleByTypeCollec;
 
     /**
      * @param BundleByPageFactory $bundleByPageFactory
      * @param ResourceBundleByPage $resourceBundleByPage
-     * @param BundleByTypeCollectionFactory $bundleByTypeCollectionFactory
+     * @param bundleByTypeCollec $bundleByTypeCollec
      */
     public function __construct(
         BundleByPageFactory           $bundleByPageFactory,
         ResourceBundleByPage          $resourceBundleByPage,
-        BundleByTypeCollectionFactory $bundleByTypeCollectionFactory
+        bundleByTypeCollec $bundleByTypeCollec
     ) {
         $this->bundleByPageFactory = $bundleByPageFactory;
         $this->resourceBundleByPage = $resourceBundleByPage;
-        $this->bundleByTypeCollectionFactory = $bundleByTypeCollectionFactory;
+        $this->bundleByTypeCollec = $bundleByTypeCollec;
     }
 
     /**
@@ -98,7 +98,7 @@ class UpdateDefaultBundleByTypes implements DataPatchInterface
     private function getTypeId($type)
     {
         /** @var \PureMashiro\BundleJs\Model\ResourceModel\BundleByType\Collection $collection */
-        $collection = $this->bundleByTypeCollectionFactory->create();
+        $collection = $this->bundleByTypeCollec->create();
         $collection->addFieldToFilter('type', $type);
         return $collection->getSize() ? $collection->getFirstItem()->getEntityId() : null;
     }
