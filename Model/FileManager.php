@@ -27,13 +27,21 @@ class FileManager extends \Magento\RequireJs\Model\FileManager
 
             $bundleTypes = $helper->getBundleTypesAction()->execute();
             foreach ($bundleTypes as $bundleType) {
-                $bundleDir = $context->getPath() . '/' . ServiceBundle::PREFIX . '/' . $bundleType . '/' . Config::BUNDLE_JS_DIR;
+
+                $bundleDir = sprintf(
+                    '%s/%s/%s/%s',
+                    $context->getPath(),
+                    ServiceBundle::PREFIX,
+                    $bundleType,
+                    Config::BUNDLE_JS_DIR
+                );
 
                 if (!$libDir->isExist($bundleDir)) {
                     continue;
                 }
 
                 foreach ($libDir->read($bundleDir) as $bundleFile) {
+                    // phpcs:ignore
                     if (pathinfo($bundleFile, PATHINFO_EXTENSION) !== 'js') {
                         continue;
                     }
@@ -47,7 +55,9 @@ class FileManager extends \Magento\RequireJs\Model\FileManager
     }
 
     /**
-     * @param $filePath
+     * Get Critical Js Asset.
+     *
+     * @param string $filePath
      * @return \Magento\Framework\View\Asset\File
      */
     public function getCriticalJsAsset($filePath)
@@ -63,6 +73,8 @@ class FileManager extends \Magento\RequireJs\Model\FileManager
     }
 
     /**
+     * Get File Manager By Plugin.
+     *
      * @return \PureMashiro\BundleJs\Helper\FileManager|null
      */
     public function getFileManagerByPlugin()

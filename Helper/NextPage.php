@@ -140,8 +140,10 @@ class NextPage
     }
 
     /**
-     * @param $type
-     * @return false|null
+     * Get Next Type.
+     *
+     * @param string $type
+     * @return bool|null
      */
     public function getNextType($type)
     {
@@ -167,7 +169,9 @@ class NextPage
     }
 
     /**
-     * @param $type
+     * Get default page.
+     *
+     * @param string $type
      * @return string|null
      */
     public function getDefaultPage($type)
@@ -213,6 +217,8 @@ class NextPage
     }
 
     /**
+     * Get complete page.
+     *
      * @return string
      */
     public function getCompletePage()
@@ -221,6 +227,8 @@ class NextPage
     }
 
     /**
+     * Get phase 2 page.
+     *
      * @return string
      */
     public function getPhase2Page()
@@ -243,6 +251,8 @@ class NextPage
     }
 
     /**
+     * Get active category id.
+     *
      * @return mixed
      */
     public function getActiveCategoryId()
@@ -256,6 +266,8 @@ class NextPage
     }
 
     /**
+     * Get Active Product Id.
+     *
      * @param bool $canAddToCart
      * @return mixed
      */
@@ -289,7 +301,9 @@ class NextPage
     }
 
     /**
-     * @param $productCollection
+     * Get Active Configurable Product Id.
+     *
+     * @param ProductCollectionFactory $productCollection
      * @return mixed
      */
     public function getActiveConfigurableProductId($productCollection)
@@ -301,6 +315,8 @@ class NextPage
     }
 
     /**
+     * Can Checkout.
+     *
      * @return bool
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\NoSuchEntityException
@@ -329,7 +345,9 @@ class NextPage
     }
 
     /**
-     * @param $productId
+     * Add Product to cart.
+     *
+     * @param int $productId
      */
     public function addProductToCart($productId)
     {

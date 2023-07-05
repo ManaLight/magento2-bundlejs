@@ -48,6 +48,9 @@ class PopulateBundleType
      */
     private $bundleByTypeFactory;
 
+    /**
+     * @var string|null
+     */
     private $allBundleByTypes = null;
 
     /**
@@ -76,7 +79,9 @@ class PopulateBundleType
     }
 
     /**
-     * @param false $critical
+     * Execute.
+     *
+     * @param bool $critical
      * @return bool
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
@@ -130,7 +135,9 @@ class PopulateBundleType
     }
 
     /**
-     * @param false $critical
+     * Get All Bundle Type Ids.
+     *
+     * @param bool $critical
      * @return array
      */
     public function getAllBundleTypeIds($critical = false)
@@ -148,7 +155,9 @@ class PopulateBundleType
     }
 
     /**
-     * @param $bundles
+     * Save Bundle Types.
+     *
+     * @param array $bundles
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function saveBundleTypes($bundles)
@@ -163,7 +172,9 @@ class PopulateBundleType
     }
 
     /**
-     * @param $typeName
+     * Get Bundle Type By Name.
+     *
+     * @param string $typeName
      * @return \Magento\Framework\DataObject|mixed|null
      */
     public function getBundleTypeByName($typeName)
@@ -182,6 +193,8 @@ class PopulateBundleType
     }
 
     /**
+     * Get All Bundle By Types.
+     *
      * @return \Magento\Framework\DataObject[]|null
      */
     public function getAllBundleByTypes()
@@ -195,7 +208,9 @@ class PopulateBundleType
     }
 
     /**
-     * @return false|void
+     * Populate Non Critical Bundles.
+     *
+     * @return bool|void
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function populateNonCriticalBundles()
@@ -243,6 +258,8 @@ class PopulateBundleType
     }
 
     /**
+     * Get Non Critical Bundle Types.
+     *
      * @return array
      */
     public function getNonCriticalBundleTypes()

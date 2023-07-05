@@ -23,5 +23,14 @@ interface SaveBundleByPageInterface
      * @param string|null $locale
      * @return array
      */
-    public function execute($fullActionName, $pathInfo, $bundle, $critical = false, $config = null, $area = null, $theme = null, $locale = null);
+    public function execute(
+        $fullActionName,
+        $pathInfo,
+        $bundle,
+        $critical = false,
+        $config = null,
+        $area = null,
+        $theme = null,
+        $locale = null
+    );
 }

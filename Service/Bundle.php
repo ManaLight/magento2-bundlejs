@@ -52,6 +52,8 @@ class Bundle extends \Magento\Deploy\Service\Bundle
     }
 
     /**
+     * Get Bundle Helper By Plugin.
+     *
      * @return \PureMashiro\BundleJs\Helper\Data|null
      */
     public function getBundleHelperByPlugin()
@@ -60,6 +62,8 @@ class Bundle extends \Magento\Deploy\Service\Bundle
     }
 
     /**
+     * Get File Paths.
+     *
      * @return string[]
      */
     public function getFilePaths()

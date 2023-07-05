@@ -17,6 +17,8 @@ class Collect extends \Magento\Config\Block\System\Config\Form\Field
     protected $_template = 'PureMashiro_BundleJs::collect-button.phtml';
 
     /**
+     * Get Collect Url.
+     *
      * @return string
      */
     public function getCollectUrl()

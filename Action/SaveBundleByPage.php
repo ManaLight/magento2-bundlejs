@@ -65,6 +65,8 @@ class SaveBundleByPage
     private $resourceBundleByType;
 
     /**
+     * Construct.
+     *
      * @param TypeMapper $typeMapper
      * @param BundleByTypeCollectionFactory $bundleByTypeCollectionFactory
      * @param SerializerInterface $serializer
@@ -98,11 +100,13 @@ class SaveBundleByPage
     }
 
     /**
-     * @param $fullActionName
-     * @param $pathInfo
-     * @param $bundle
-     * @param bool $critical
-     * @param bool $merge
+     * Execute.
+     *
+     * @param string $fullActionName
+     * @param string $pathInfo
+     * @param array  $bundle
+     * @param bool   $critical
+     * @param bool   $merge
      * @return array|bool[]|false
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
@@ -152,8 +156,10 @@ class SaveBundleByPage
     }
 
     /**
-     * @param $type
-     * @param false $critical
+     * Get Type Id.
+     *
+     * @param string $type
+     * @param bool $critical
      * @return mixed
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
@@ -179,6 +185,8 @@ class SaveBundleByPage
     }
 
     /**
+     * Create Empty Basic Bundles If Not Exists.
+     *
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     private function createEmptyBasicBundlesIfNotExists()
@@ -203,7 +211,9 @@ class SaveBundleByPage
     }
 
     /**
-     * @param $typeId
+     * Get Page Bundle.
+     *
+     * @param string $typeId
      * @return \Magento\Framework\DataObject|BundleByPage
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */

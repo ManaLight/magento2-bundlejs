@@ -19,6 +19,7 @@ class FileManagerPlugin
 
     /**
      * FileManagerPlugin constructor.
+     *
      * @param FileManager $fileManager
      */
     public function __construct(
@@ -28,6 +29,8 @@ class FileManagerPlugin
     }
 
     /**
+     * After Get File Manager By Plugin.
+     *
      * @return FileManager
      */
     public function afterGetFileManagerByPlugin()
