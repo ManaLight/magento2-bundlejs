@@ -47,8 +47,10 @@ class ConfigPlugin
     }
 
     /**
+     * After Get Config.
+     *
      * @param RequireJsConfig $config
-     * @param $fullConfig
+     * @param mixed $fullConfig
      * @return string
      */
     public function afterGetConfig(RequireJsConfig $config, $fullConfig)
@@ -67,6 +69,8 @@ class ConfigPlugin
     }
 
     /**
+     * Get Defer js.
+     *
      * @return string
      */
     public function getDeferJs()

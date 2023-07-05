@@ -70,7 +70,9 @@ class AddRequireJsContextsConfig
     }
 
     /**
-     * @param $dom
+     * Execute.
+     *
+     * @param string $dom
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute($dom)
@@ -100,7 +102,8 @@ class AddRequireJsContextsConfig
                 continue;
             }
 
-            $destinationDir = $area . '/' . $theme . '/' . $locale . '/' . 'mashiro' . '/' . 'critical' . '/' . $deploymentVersion;
+            $destinationDir = sprintf('%s/%s/%s/mashiro/critical/%s', $area, $theme, $locale, $deploymentVersion);
+
             $filePath = $destinationDir . '/' . $filePath;
             $filePath = $this->storeManager->getStore()->getBaseUrl(UrlInterface::URL_TYPE_MEDIA) . $filePath;
 
@@ -114,6 +117,8 @@ class AddRequireJsContextsConfig
     }
 
     /**
+     * Is phase 2.
+     *
      * @return bool
      */
     private function isPhase2()
