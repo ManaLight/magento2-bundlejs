@@ -87,6 +87,14 @@
                         <field id="enable">1</field>
                     </depends>
                 </field>
+                <field id="allowed_static_pages" translate="label comment" sortOrder="75" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                    <label>Full action name of allowed static pages</label>
+                    <tooltip><![CDATA[Please leave it as is<br>OR get an expert to help configure this<br>OR Contact us for the support!]]></tooltip>
+                    <comment>||| seperated. Full action name of allowed static pages which have JS delay</comment>
+                    <depends>
+                        <field id="enable_delay_js_execution">1</field>
+                    </depends>
+                </field>
                 <field id="exclude_internal_scripts" translate="label comment" sortOrder="80" type="textarea" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Exclude inline scripts</label>
                     <tooltip><![CDATA[Please leave it as is<br>OR get an expert to help configure this<br>OR Contact us for the support!]]></tooltip>

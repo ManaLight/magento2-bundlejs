@@ -14,7 +14,6 @@ use Magento\Framework\RequireJs\Config as RequireJsConfig;
 use Magento\Framework\View\Asset\ConfigInterface as AssetConfig;
 use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Framework\View\Asset\Minification;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\RequireJs\Block\Html\Head\Config as HeadConfig;
 use Magento\Theme\Model\View\Design;
@@ -23,6 +22,7 @@ use PureMashiro\BundleJs\Helper\Config as ConfigHelper;
 use PureMashiro\BundleJs\Model\BundleByType;
 use PureMashiro\BundleJs\Model\FileManager;
 use PureMashiro\BundleJs\Model\TypeMapper;
+use PureMashiro\BundleJs\Model\Validator\IsAllowedStaticPage;
 
 class ConfigPlugin
 {
@@ -77,9 +77,9 @@ class ConfigPlugin
     private $typeMapper;
 
     /**
-     * @var LayoutInterface
+     * @var IsAllowedStaticPage
      */
-    private $layout;
+    private $isAllowedStaticPage;
 
     /**
      * @param FileManager $fileManager
@@ -92,7 +92,7 @@ class ConfigPlugin
      * @param FileDriver $fileDriver
      * @param RequestInterface $request
      * @param TypeMapper $typeMapper
-     * @param LayoutInterface $layout
+     * @param IsAllowedStaticPage $isAllowedStaticPage
      */
     public function __construct(
         FileManager              $fileManager,
@@ -105,7 +105,7 @@ class ConfigPlugin
         FileDriver               $fileDriver,
         RequestInterface         $request,
         TypeMapper               $typeMapper,
-        LayoutInterface          $layout
+        IsAllowedStaticPage      $isAllowedStaticPage
     ) {
         $this->fileManager = $fileManager;
         $this->pageConfig = $pageConfig;
@@ -117,7 +117,7 @@ class ConfigPlugin
         $this->fileDriver = $fileDriver;
         $this->request = $request;
         $this->typeMapper = $typeMapper;
-        $this->layout = $layout;
+        $this->isAllowedStaticPage = $isAllowedStaticPage;
     }
 
     /**
@@ -143,7 +143,7 @@ class ConfigPlugin
 
         $assetCollection = $this->pageConfig->getAssetCollection();
 
-        if ($this->configHelper->isDisableBundlesOnStaticPages() && $this->layout->isCacheable()) {
+        if ($this->configHelper->isDisableBundlesOnStaticPages() && $this->isAllowedStaticPage->validate($subject->getLayout())) {
             $this->insertCriticalJsAssets($assetCollection, $after);
         } else {
             $bundleAssets = $this->fileManager->createBundleJsPool();
@@ -159,7 +159,7 @@ class ConfigPlugin
                     );
                 }
 
-                if ($this->layout->isCacheable()) {
+                if ($this->isAllowedStaticPage->validate($subject->getLayout())) {
                     $after = reset($bundleAssets)->getFilePath();
                     $this->insertCriticalJsAssets($assetCollection, $after);
                 }

@@ -27,6 +27,7 @@ class Config
     public const XML_PATH_BUNDLE_JS_GENERAL_EXCLUDE_EXTERNAL_SCRIPTS = 'bundle_js/general/exclude_external_scripts';
     public const XML_PATH_BUNDLE_JS_GENERAL_ALLOWED_JS_COMPONENTS = 'bundle_js/general/allowed_js_components';
     public const XML_PATH_BUNDLE_JS_GENERAL_DISABLE_BUNDLES_ON_STATIC_PAGES = 'bundle_js/general/disable_bundles_on_static_pages';
+    public const XML_PATH_BUNDLE_JS_GENERAL_ALLOWED_STATIC_PAGES = 'bundle_js/general/allowed_static_pages';
 
     /**
      * @var ScopeConfigInterface
@@ -248,5 +249,15 @@ class Config
     public function isDisableBundlesOnStaticPages()
     {
         return (bool)$this->getValue(self::XML_PATH_BUNDLE_JS_GENERAL_DISABLE_BUNDLES_ON_STATIC_PAGES);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllowedStaticPages()
+    {
+        $value = (string)$this->getValue(self::XML_PATH_BUNDLE_JS_GENERAL_ALLOWED_STATIC_PAGES);
+
+        return $value ? array_unique(array_filter(array_map('trim', explode('|||', $value)))) : [];
     }
 }

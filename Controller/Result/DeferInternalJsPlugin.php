@@ -14,6 +14,7 @@ use Magento\Framework\View\Result\Layout;
 use PureMashiro\BundleJs\Helper\Config as ConfigHelper;
 use PureMashiro\BundleJs\Helper\DeferJsReplacer as HelperDeferJsReplacer;
 use PureMashiro\BundleJs\Model\DeferJsReplacer;
+use PureMashiro\BundleJs\Model\Validator\IsAllowedStaticPage;
 
 class DeferInternalJsPlugin
 {
@@ -38,6 +39,11 @@ class DeferInternalJsPlugin
     private $helperDeferJsReplacer;
 
     /**
+     * @var IsAllowedStaticPage
+     */
+    private $isAllowedStaticPage;
+
+    /**
      * @param ConfigHelper $configHelper
      * @param DeferJsReplacer $deferJsReplacer
      * @param DataObject $dataObject
@@ -47,12 +53,14 @@ class DeferInternalJsPlugin
         ConfigHelper          $configHelper,
         DeferJsReplacer       $deferJsReplacer,
         DataObject            $dataObject,
-        HelperDeferJsReplacer $helperDeferJsReplacer
+        HelperDeferJsReplacer $helperDeferJsReplacer,
+        IsAllowedStaticPage   $isAllowedStaticPage
     ) {
         $this->configHelper = $configHelper;
         $this->deferJsReplacer = $deferJsReplacer;
         $this->dataObject = $dataObject;
         $this->helperDeferJsReplacer = $helperDeferJsReplacer;
+        $this->isAllowedStaticPage = $isAllowedStaticPage;
     }
 
     /**
@@ -67,7 +75,7 @@ class DeferInternalJsPlugin
             return $result;
         }
 
-        if ($subject->getLayout()->isCacheable()) {
+        if ($this->isAllowedStaticPage->validate($subject->getLayout())) {
             $content = (string)$httpResponse->getContent();
             $this->dataObject->setHelperDeferJsReplacer($this->helperDeferJsReplacer);
             $dom = $this->deferJsReplacer->replaceHtml($content, $this->dataObject);
