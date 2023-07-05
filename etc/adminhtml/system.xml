@@ -111,10 +111,6 @@
                         <field id="enable_delay_js_execution">1</field>
                     </depends>
                 </field>
-                <field id="disable_on_checkout" translate="label" sortOrder="110" showInDefault="1" showInWebsite="1" showInStore="1" type="select">
-                    <label>Disable on Checkout pages</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
             </group>
             <group id="custom_path" translate="label" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Custom paths for auto-collecting bundle js</label>
