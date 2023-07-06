@@ -30,7 +30,7 @@ class Config
     public const XML_PATH_BUNDLE_JS_GENERAL_ALLOWED_JS_COMPONENTS = 'bundle_js/general/allowed_js_components';
     public const XML_PATH_BUNDLE_JS_GENERAL_DISABLE_BUNDLES_ON_STATIC_PAGES =
         'bundle_js/general/disable_bundles_on_static_pages';
-    public const XML_PATH_BUNDLE_JS_GENERAL_DISABLE_ON_CHECKOUT = 'bundle_js/general/disable_on_checkout';
+    public const XML_PATH_BUNDLE_JS_GENERAL_ALLOWED_STATIC_PAGES = 'bundle_js/general/allowed_static_pages';
 
     /**
      * @var ScopeConfigInterface
@@ -299,12 +299,14 @@ class Config
     }
 
     /**
-     * Is disable on checkout pages.
+     * Get Allowed Static Pages.
      *
      * @return bool
      */
-    public function isDisableOnCheckoutPages()
+    public function getAllowedStaticPages()
     {
-        return (bool)$this->getValue(self::XML_PATH_BUNDLE_JS_GENERAL_DISABLE_ON_CHECKOUT);
+        $value = (string)$this->getValue(self::XML_PATH_BUNDLE_JS_GENERAL_ALLOWED_STATIC_PAGES);
+
+        return $value ? array_unique(array_filter(array_map('trim', explode('|||', $value)))) : [];
     }
 }
