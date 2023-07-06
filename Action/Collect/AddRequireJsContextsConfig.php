@@ -72,7 +72,7 @@ class AddRequireJsContextsConfig
     /**
      * Execute.
      *
-     * @param string $dom
+     * @param \simple_html_dom\simple_html_dom $dom
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute($dom)

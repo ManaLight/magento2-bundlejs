@@ -14,10 +14,10 @@
                 <enable_bundle_js_in_storefront>1</enable_bundle_js_in_storefront>
                 <disable_bundles_on_static_pages>1</disable_bundles_on_static_pages>
                 <enable_delay_js_execution>1</enable_delay_js_execution>
+                <allowed_static_pages>cms_index_index|||cms_page_view|||catalog_product_view|||catalog_category_view</allowed_static_pages>
                 <exclude_internal_scripts>window.oscRoute =</exclude_internal_scripts>
                 <exclude_external_scripts>js/lite-yt-embed</exclude_external_scripts>
                 <allowed_js_components>menu|||tabs|||mage/gallery/gallery|||Magento_Swatches/js/swatch-renderer|||Magento_Swatches/js/catalog-add-to-cart|||Magento_Catalog/js/validate-product|||priceBox|||catalogAddToCart</allowed_js_components>
-                <disable_on_checkout>0</disable_on_checkout>
             </general>
         </bundle_js>
     </default>
