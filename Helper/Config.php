@@ -302,6 +302,8 @@ class Config
      * Get Allowed Static Pages.
      *
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD)
      */
     public function getAllowedStaticPages()
     {
