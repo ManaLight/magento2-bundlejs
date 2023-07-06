@@ -305,6 +305,8 @@ class Config
      */
     public function getAllowedStaticPages()
     {
-        return (bool)$this->getValue(self::XML_PATH_BUNDLE_JS_GENERAL_DISABLE_ON_CHECKOUT);
+        $value = (string)$this->getValue(self::XML_PATH_BUNDLE_JS_GENERAL_ALLOWED_STATIC_PAGES);
+
+        return $value ? array_unique(array_filter(array_map('trim', explode('|||', $value)))) : [];
     }
 }
