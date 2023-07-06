@@ -35,24 +35,24 @@ class DeferInternalJsPlugin
     /**
      * @var HelperDeferJsReplacer
      */
-    private $helperDeferJsReplacer;
+    private $helperDeferJs;
 
     /**
      * @param ConfigHelper $configHelper
      * @param DeferJsReplacer $deferJsReplacer
      * @param DataObject $dataObject
-     * @param HelperDeferJsReplacer $helperDeferJsReplacer
+     * @param HelperDeferJsReplacer $helperDeferJs
      */
     public function __construct(
         ConfigHelper          $configHelper,
         DeferJsReplacer       $deferJsReplacer,
         DataObject            $dataObject,
-        HelperDeferJsReplacer $helperDeferJsReplacer
+        HelperDeferJsReplacer $helperDeferJs
     ) {
         $this->configHelper = $configHelper;
         $this->deferJsReplacer = $deferJsReplacer;
         $this->dataObject = $dataObject;
-        $this->helperDeferJsReplacer = $helperDeferJsReplacer;
+        $this->helperDeferJs = $helperDeferJs;
     }
 
     /**
@@ -71,7 +71,7 @@ class DeferInternalJsPlugin
 
         if ($subject->getLayout()->isCacheable()) {
             $content = (string)$httpResponse->getContent();
-            $this->dataObject->setHelperDeferJsReplacer($this->helperDeferJsReplacer);
+            $this->dataObject->setHelperDeferJsReplacer($this->helperDeferJs);
             $dom = $this->deferJsReplacer->replaceHtml($content, $this->dataObject);
             $httpResponse->setContent(is_string($dom) ? $dom : $dom->save());
         }

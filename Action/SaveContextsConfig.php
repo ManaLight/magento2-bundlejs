@@ -17,20 +17,20 @@ class SaveContextsConfig
     /**
      * @var ResourceContextsConfig
      */
-    private $resourceContextsConfig;
+    private $resourceContexts;
 
     /**
      * Construct.
      *
      * @param CollectionFactory $collectionFactory
-     * @param ResourceContextsConfig $resourceContextsConfig
+     * @param ResourceContextsConfig $resourceContexts
      */
     public function __construct(
         CollectionFactory      $collectionFactory,
-        ResourceContextsConfig $resourceContextsConfig
+        ResourceContextsConfig $resourceContexts
     ) {
         $this->collectionFactory = $collectionFactory;
-        $this->resourceContextsConfig = $resourceContextsConfig;
+        $this->resourceContexts = $resourceContexts;
     }
 
     /**
@@ -45,6 +45,6 @@ class SaveContextsConfig
         $collection = $this->collectionFactory->create();
         $contextsConfig = $collection->getFirstItem();
         $contextsConfig->setConfig($config);
-        $this->resourceContextsConfig->save($contextsConfig);
+        $this->resourceContexts->save($contextsConfig);
     }
 }

@@ -51,6 +51,7 @@ class TypeMapper
      * @return mixed|null
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD)
      * @TODO: refactor into new functions to reduce the complexity of this one.
      */
     public function map($fullActionName, $pathInfo, $full = false)

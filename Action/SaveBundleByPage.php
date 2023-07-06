@@ -27,7 +27,7 @@ class SaveBundleByPage
     /**
      * @var BundleByTypeCollectionFactory
      */
-    private $bundleByTypeCollectionFactory;
+    private $bundleByType;
 
     /**
      * @var SerializerInterface
@@ -42,7 +42,7 @@ class SaveBundleByPage
     /**
      * @var BundleByPageCollectionFactory
      */
-    private $bundleByPageCollectionFactory;
+    private $bundleByPage;
 
     /**
      * @var ResourceBundleByPage
@@ -68,10 +68,10 @@ class SaveBundleByPage
      * Construct.
      *
      * @param TypeMapper $typeMapper
-     * @param BundleByTypeCollectionFactory $bundleByTypeCollectionFactory
+     * @param BundleByTypeCollectionFactory $bundleByType
      * @param SerializerInterface $serializer
      * @param BundleByPageFactory $bundleByPageFactory
-     * @param BundleByPageCollectionFactory $bundleByPageCollectionFactory
+     * @param BundleByPageCollectionFactory $bundleByPage
      * @param ResourceBundleByPage $resourceBundleByPage
      * @param ConfigHelper $configHelper
      * @param GetNextPage $getNextPage
@@ -79,20 +79,20 @@ class SaveBundleByPage
      */
     public function __construct(
         TypeMapper $typeMapper,
-        BundleByTypeCollectionFactory $bundleByTypeCollectionFactory,
+        BundleByTypeCollectionFactory $bundleByType,
         SerializerInterface $serializer,
         BundleByPageFactory $bundleByPageFactory,
-        BundleByPageCollectionFactory $bundleByPageCollectionFactory,
+        BundleByPageCollectionFactory $bundleByPage,
         ResourceBundleByPage $resourceBundleByPage,
         ConfigHelper $configHelper,
         GetNextPage $getNextPage,
         ResourceBundleByType $resourceBundleByType
     ) {
         $this->typeMapper = $typeMapper;
-        $this->bundleByTypeCollectionFactory = $bundleByTypeCollectionFactory;
+        $this->bundleByType = $bundleByType;
         $this->serializer = $serializer;
         $this->bundleByPageFactory = $bundleByPageFactory;
-        $this->bundleByPageCollectionFactory = $bundleByPageCollectionFactory;
+        $this->bundleByPage = $bundleByPage;
         $this->resourceBundleByPage = $resourceBundleByPage;
         $this->configHelper = $configHelper;
         $this->getNextPage = $getNextPage;
@@ -109,6 +109,8 @@ class SaveBundleByPage
      * @param bool   $merge
      * @return array|bool[]|false
      * @throws \Magento\Framework\Exception\AlreadyExistsException
+     *
+     * @SuppressWarnings(PHPMD)
      */
     public function execute($fullActionName, $pathInfo, $bundle, $critical = false, $merge = false)
     {
@@ -148,11 +150,11 @@ class SaveBundleByPage
                 'success' => true,
                 'nextPage' => $this->getNextPage->execute($type, $critical)
             ];
-        } else {
-            return [
-                'success' => true
-            ];
         }
+
+        return [
+            'success' => true
+        ];
     }
 
     /**
@@ -162,6 +164,8 @@ class SaveBundleByPage
      * @param bool $critical
      * @return mixed
      * @throws \Magento\Framework\Exception\AlreadyExistsException
+     *
+     * @SuppressWarnings(PHPMD)
      */
     public function getTypeId($type, $critical = false)
     {
@@ -170,7 +174,7 @@ class SaveBundleByPage
         }
 
         /** @var \PureMashiro\BundleJs\Model\ResourceModel\BundleByType\Collection $collection */
-        $collection = $this->bundleByTypeCollectionFactory->create();
+        $collection = $this->bundleByType->create();
         $collection->addFieldToFilter('type', $type);
 
         if ($collection->getSize()) {
@@ -220,11 +224,13 @@ class SaveBundleByPage
     private function getPageBundle($typeId)
     {
         /** @var \PureMashiro\BundleJs\Model\ResourceModel\BundleByPage\Collection $collection */
-        $collection = $this->bundleByPageCollectionFactory->create();
+        $collection = $this->bundleByPage->create();
         $collection->addFieldToFilter('type_id', $typeId);
         if ($collection->getSize()) {
             $pageBundle = $collection->getFirstItem();
-        } else {
+        }
+
+        if (!$collection->getSize()) {
             $pageBundle = $this->bundleByPageFactory->create();
             $pageBundle->setTypeId($typeId);
         }

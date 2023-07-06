@@ -57,6 +57,8 @@ class SaveBundleByPage implements SaveBundleByPageInterface
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD)
      */
     public function execute(
         $fullActionName,

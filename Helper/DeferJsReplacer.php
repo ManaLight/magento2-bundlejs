@@ -12,7 +12,7 @@ class DeferJsReplacer
     /**
      * @var AddRequireJsContextsConfig
      */
-    private $addRequireJsContextsConfig;
+    private $addRequireJs;
 
     /**
      * @var ConfigHelper
@@ -22,22 +22,22 @@ class DeferJsReplacer
     /**
      * @var array|string[]
      */
-    private $excludedInternalScripts;
+    private $excludedInternal;
 
     /**
      * @var array|string[]
      */
-    private $excludedExternalScripts;
+    private $excludedExternal;
 
     /**
-     * @param AddRequireJsContextsConfig $addRequireJsContextsConfig
+     * @param AddRequireJsContextsConfig $addRequireJs
      * @param Config $configHelper
      */
     public function __construct(
-        AddRequireJsContextsConfig $addRequireJsContextsConfig,
+        AddRequireJsContextsConfig $addRequireJs,
         ConfigHelper               $configHelper
     ) {
-        $this->addRequireJsContextsConfig = $addRequireJsContextsConfig;
+        $this->addRequireJs = $addRequireJs;
         $this->configHelper = $configHelper;
     }
 
@@ -48,7 +48,7 @@ class DeferJsReplacer
      */
     public function getAddRequireJsContextsConfigAction()
     {
-        return $this->addRequireJsContextsConfig;
+        return $this->addRequireJs;
     }
 
     /**
@@ -58,11 +58,11 @@ class DeferJsReplacer
      */
     public function getExcludedInternalScripts()
     {
-        if ($this->excludedInternalScripts !== null) {
-            return $this->excludedInternalScripts;
+        if ($this->excludedInternal !== null) {
+            return $this->excludedInternal;
         }
 
-        return $this->excludedInternalScripts = array_merge([
+        return $this->excludedInternal = array_merge([
             'var BASE_URL =',
             'window.checkout =',
             'window.checkoutConfig ='
@@ -76,11 +76,11 @@ class DeferJsReplacer
      */
     public function getExcludedExternalScripts()
     {
-        if ($this->excludedExternalScripts !== null) {
-            return $this->excludedExternalScripts;
+        if ($this->excludedExternal !== null) {
+            return $this->excludedExternal;
         }
 
-        return $this->excludedExternalScripts = array_merge([
+        return $this->excludedExternal = array_merge([
             'requirejs/require',
             'mage/requirejs/mixins',
             'mage/polyfill',
