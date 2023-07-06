@@ -47,12 +47,25 @@ body:
         - PHP 8.2
     validations:
       required: true
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      description: Which browser is being impacted?
+      options:
+        - All
+        - Chrome
+        - Edge
+        - Opera
+        - Safari
+    validations:
+      required: true
   - type: textarea
     id: logs
     attributes:
       label: Are there relevant logs about the problem?
       description: Copy and paste any relevant log output. This will be automatically formatted in code, so no need for backticks.
-      placeholder: If active logging is in var/log/system.log, consider also sending var/log/exception.log and the browser console log.
+      placeholder: If it is active, our log is in var/log/payment.log, also consider sending the var/log/exception.log
       render: bash
   - type: checkboxes
     id: privacy
