@@ -14,7 +14,6 @@ use Magento\Framework\RequireJs\Config as RequireJsConfig;
 use Magento\Framework\View\Asset\ConfigInterface as AssetConfig;
 use Magento\Framework\View\Asset\GroupedCollection;
 use Magento\Framework\View\Asset\Minification;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\RequireJs\Block\Html\Head\Config as HeadConfig;
 use Magento\Theme\Model\View\Design;
@@ -23,14 +22,13 @@ use PureMashiro\BundleJs\Helper\Config as ConfigHelper;
 use PureMashiro\BundleJs\Model\BundleByType;
 use PureMashiro\BundleJs\Model\FileManager;
 use PureMashiro\BundleJs\Model\TypeMapper;
+use PureMashiro\BundleJs\Model\Validator\IsAllowedStaticPage;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigPlugin
 {
-    public const CHECKOUT_ACTION_NAMES = ['checkout_index_index', 'checkout_cart_index'];
-
     /**
      * @var FileManager
      */
@@ -59,7 +57,7 @@ class ConfigPlugin
     /**
      * @var GenerateCriticalJsAssets
      */
-    private $genCritJsAssets;
+    private $generateCriticaL;
 
     /**
      * @var Design
@@ -82,9 +80,9 @@ class ConfigPlugin
     private $typeMapper;
 
     /**
-     * @var LayoutInterface
+     * @var IsAllowedStaticPage
      */
-    private $layout;
+    private $isAllowedStaticPage;
 
     /**
      * @param FileManager $fileManager
@@ -92,12 +90,12 @@ class ConfigPlugin
      * @param Minification $minification
      * @param ConfigHelper $configHelper
      * @param AssetConfig $assetConfig
-     * @param GenerateCriticalJsAssets $genCritJsAssets
+     * @param GenerateCriticalJsAssets $generateCriticaL
      * @param Design $design
      * @param FileDriver $fileDriver
      * @param RequestInterface $request
      * @param TypeMapper $typeMapper
-     * @param LayoutInterface $layout
+     * @param IsAllowedStaticPage $isAllowedStaticPage
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -107,37 +105,34 @@ class ConfigPlugin
         Minification             $minification,
         ConfigHelper             $configHelper,
         AssetConfig              $assetConfig,
-        GenerateCriticalJsAssets $genCritJsAssets,
+        GenerateCriticalJsAssets $generateCriticaL,
         Design                   $design,
         FileDriver               $fileDriver,
         RequestInterface         $request,
         TypeMapper               $typeMapper,
-        LayoutInterface          $layout
+        IsAllowedStaticPage      $isAllowedStaticPage
     ) {
         $this->fileManager = $fileManager;
         $this->pageConfig = $pageConfig;
         $this->minification = $minification;
         $this->configHelper = $configHelper;
         $this->assetConfig = $assetConfig;
-        $this->genCritJsAssets = $genCritJsAssets;
+        $this->generateCriticaL = $generateCriticaL;
         $this->design = $design;
         $this->fileDriver = $fileDriver;
         $this->request = $request;
         $this->typeMapper = $typeMapper;
-        $this->layout = $layout;
+        $this->isAllowedStaticPage = $isAllowedStaticPage;
     }
 
     /**
-     * After Set Layout.
+     * Set After Layout
      *
      * @param HeadConfig $subject
      * @param mixed $result
      * @return mixed
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     *
-     * @TODO: refactor into new functions to reduce the complexity of this one.
      */
     public function afterSetLayout(HeadConfig $subject, $result)
     {
@@ -150,7 +145,6 @@ class ConfigPlugin
             $minResolver = $this->fileManager->createMinResolverAsset();
             $after = $minResolver->getFilePath();
         }
-
         $requireJsMapConfig = $this->fileManager->createRequireJsMapConfigAsset();
         if ($requireJsMapConfig) {
             $after = $requireJsMapConfig->getFilePath();
@@ -158,11 +152,13 @@ class ConfigPlugin
 
         $assetCollection = $this->pageConfig->getAssetCollection();
 
-        if ($this->configHelper->isDisableBundlesOnStaticPages() && $this->layout->isCacheable()) {
+        if ($this->configHelper->isDisableBundlesOnStaticPages()
+            && $this->isAllowedStaticPage->validate($subject->getLayout())) {
             $this->insertCriticalJsAssets($assetCollection, $after);
         }
-
-        if (!$this->configHelper->isDisableBundlesOnStaticPages() && !$this->layout->isCacheable()) {
+        
+        if (!$this->configHelper->isDisableBundlesOnStaticPages()
+        && !$this->isAllowedStaticPage->validate($subject->getLayout())) {
             $bundleAssets = $this->fileManager->createBundleJsPool();
             $staticAsset = $this->fileManager->createStaticJsAsset();
             /** @var \Magento\Framework\View\Asset\File $bundleAsset */
@@ -176,7 +172,7 @@ class ConfigPlugin
                     );
                 }
 
-                if ($this->layout->isCacheable()) {
+                if ($this->isAllowedStaticPage->validate($subject->getLayout())) {
                     $after = reset($bundleAssets)->getFilePath();
                     $this->insertCriticalJsAssets($assetCollection, $after);
                 }
@@ -193,24 +189,16 @@ class ConfigPlugin
     }
 
     /**
-     * Is Enable.
-     *
      * @return bool
      */
     public function isEnable(): bool
     {
-        if ($this->isExcluded()) {
-            return false;
-        }
-
         return $this->configHelper->canBundleJsInStorefront() && !$this->assetConfig->isBundlingJsFiles();
     }
 
     /**
-     * Insert Critical Js Assets.
-     *
      * @param GroupedCollection $assetCollection
-     * @param string $after
+     * @param $after
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -244,13 +232,7 @@ class ConfigPlugin
         $locale = $designParams['locale'];
 
         foreach ($files as $filePath) {
-            $destination = $this->genCritJsAssets->getFileDestination(
-                false,
-                $area,
-                $theme,
-                $locale,
-                $filePath
-            );
+            $destination = $this->generateCriticaL->getFileDestination(false, $area, $theme, $locale, $filePath);
             if (!$this->fileDriver->isExists($destination)) {
                 continue;
             }
