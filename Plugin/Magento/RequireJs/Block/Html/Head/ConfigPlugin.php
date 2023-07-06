@@ -251,15 +251,4 @@ class ConfigPlugin
             );
         }
     }
-
-    /**
-     * Is Excluded.
-     *
-     * @return bool
-     */
-    private function isExcluded(): bool
-    {
-        return $this->configHelper->isDisableOnCheckoutPages()
-            && in_array($this->request->getFullActionName(), self::CHECKOUT_ACTION_NAMES);
-    }
 }
