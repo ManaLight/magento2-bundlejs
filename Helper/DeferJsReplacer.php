@@ -42,6 +42,8 @@ class DeferJsReplacer
     }
 
     /**
+     * Get Add Require Js Contexts Config Action.
+     *
      * @return AddRequireJsContextsConfig
      */
     public function getAddRequireJsContextsConfigAction()
@@ -50,6 +52,8 @@ class DeferJsReplacer
     }
 
     /**
+     * Get Excluded Internal Scripts.
+     *
      * @return array|string[]
      */
     public function getExcludedInternalScripts()
@@ -66,6 +70,8 @@ class DeferJsReplacer
     }
 
     /**
+     * Get Excluded External Scripts.
+     *
      * @return array|string[]
      */
     public function getExcludedExternalScripts()

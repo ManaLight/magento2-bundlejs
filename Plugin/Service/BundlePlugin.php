@@ -27,8 +27,10 @@ class BundlePlugin
     }
 
     /**
+     * After Get Bundle Helper By Plugin.
+     *
      * @param Bundle $subject
-     * @param $result
+     * @param mixed  $result
      * @return Data
      */
     public function afterGetBundleHelperByPlugin(Bundle $subject, $result)

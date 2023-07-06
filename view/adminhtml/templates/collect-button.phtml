@@ -1,6 +1,16 @@
 <?php
+
+/**
+ * Copyright Pure Mashiro. All rights reserved.
+ * @author Mana Light
+ */
+
 /** @var \PureMashiro\BundleJs\Block\System\Config\Form\Field\Collect $block */
+/** @var \Magento\Framework\Escaper $escaper */
+
 ?>
 <button class="bundle_js collect_bundle" title="Collect" type="button">
-    <a href="<?= $block->getCollectUrl() ?>" target="_blank"><?= ucwords($this->getMode()) ?></a>
+    <a href="<?= $escaper->escapeUrl($block->getCollectUrl()) ?>" target="_blank">
+        <?= $escaper->escapeHtml($block->getMode()) ?>
+    </a>
 </button>

@@ -98,10 +98,12 @@ class GenerateCriticalJsAssets
     }
 
     /**
-     * @param $area
-     * @param $theme
-     * @param $locale
-     * @param false $media
+     * Execute.
+     *
+     * @param string $area
+     * @param string $theme
+     * @param string $locale
+     * @param bool   $media
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -113,8 +115,10 @@ class GenerateCriticalJsAssets
     }
 
     /**
-     * @param $type
-     * @param $theme
+     * Add Critical Dependencies.
+     *
+     * @param string $type
+     * @param string $theme
      * @return string|null
      */
     private function addCriticalDependencies($type, $theme)
@@ -136,8 +140,10 @@ JS;
     }
 
     /**
-     * @param $type
-     * @param $theme
+     * Get Critical Dependencies.
+     *
+     * @param string $type
+     * @param string $theme
      * @return array|mixed
      */
     private function getCriticalDependencies($type, $theme)
@@ -146,10 +152,12 @@ JS;
     }
 
     /**
-     * @param $area
-     * @param $theme
-     * @param $locale
-     * @param false $media
+     * Generate Contexts Config Js.
+     *
+     * @param string    $area
+     * @param string    $theme
+     * @param string    $locale
+     * @param bool      $media
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -165,10 +173,12 @@ JS;
     }
 
     /**
-     * @param $area
-     * @param $theme
-     * @param $locale
-     * @param false $media
+     * Generate critical Deps Js.
+     *
+     * @param string    $area
+     * @param string    $theme
+     * @param string    $locale
+     * @param bool      $media
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -195,10 +205,12 @@ JS;
     }
 
     /**
-     * @param $media
-     * @param $area
-     * @param $theme
-     * @param $locale
+     * Get File Destination.
+     *
+     * @param string $media
+     * @param string $area
+     * @param string $theme
+     * @param string $locale
      * @param string $filePath
      * @return string
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -207,8 +219,11 @@ JS;
     {
         if ($media) {
             $deploymentVersion = $this->deploymentVersionStorage->load();
-            $destinationDir = $area . '/' . $theme . '/' . $locale . '/' . 'mashiro' . '/' . 'critical' . '/' . $deploymentVersion;
-            $this->ioFile->checkAndCreateFolder($this->bundleJsHelper->getPubMediaDir()->getAbsolutePath($destinationDir));
+            $destinationDir = sprintf('%s/%s/%s/mashiro/critical/%s', $area, $theme, $locale, $deploymentVersion);
+
+            $this->ioFile->checkAndCreateFolder(
+                $this->bundleJsHelper->getPubMediaDir()->getAbsolutePath($destinationDir)
+            );
             $destinationPath = $destinationDir . '/' . $filePath;
             $destination = $this->bundleJsHelper->getPubMediaDir()->getAbsolutePath($destinationPath);
         } else {
@@ -219,6 +234,8 @@ JS;
     }
 
     /**
+     * Write File.
+     *
      * @param string $destination
      * @param string $js
      * @throws \Magento\Framework\Exception\FileSystemException
@@ -235,6 +252,8 @@ JS;
     }
 
     /**
+     * Get Contexts Config Js Content.
+     *
      * @return string
      */
     private function getContextsConfigJsContent(): string
@@ -260,9 +279,11 @@ JS;
     }
 
     /**
-     * @param $area
-     * @param $theme
-     * @param $locale
+     * Generate Allowed Components Js.
+     *
+     * @param string $area
+     * @param string $theme
+     * @param string $locale
      * @param bool $media
      * @return void
      * @throws FileSystemException
@@ -280,6 +301,8 @@ JS;
     }
 
     /**
+     * Get Allowed Components Js Content.
+     *
      * @return string|null
      */
     private function getAllowedComponentsJsContent()
@@ -298,7 +321,13 @@ window.mashiro = {
     }
 };
 
-require(['PureMashiro_BundleJs/mage/apply/main', 'mage/url', 'jquery-ui-modules/widget', 'jquery-ui-modules/core', 'domReady!'], function (mage, url) {
+require([
+    'PureMashiro_BundleJs/mage/apply/main',
+    'mage/url',
+    'jquery-ui-modules/widget',
+    'jquery-ui-modules/core',
+    'domReady!'
+], function (mage, url) {
     url.setBaseUrl(window.BASE_URL);
     setTimeout(mage.apply);
 });

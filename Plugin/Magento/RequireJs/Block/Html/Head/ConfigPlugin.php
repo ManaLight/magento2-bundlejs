@@ -121,8 +121,10 @@ class ConfigPlugin
     }
 
     /**
+     * After Set Layout.
+     *
      * @param HeadConfig $subject
-     * @param $result
+     * @param mixed $result
      * @return mixed
      */
     public function afterSetLayout(HeadConfig $subject, $result)
@@ -136,6 +138,7 @@ class ConfigPlugin
             $minResolver = $this->fileManager->createMinResolverAsset();
             $after = $minResolver->getFilePath();
         }
+
         $requireJsMapConfig = $this->fileManager->createRequireJsMapConfigAsset();
         if ($requireJsMapConfig) {
             $after = $requireJsMapConfig->getFilePath();
@@ -176,6 +179,8 @@ class ConfigPlugin
     }
 
     /**
+     * Is Enable.
+     *
      * @return bool
      */
     public function isEnable(): bool
@@ -184,8 +189,10 @@ class ConfigPlugin
     }
 
     /**
+     * Insert Critical Js Assets.
+     *
      * @param GroupedCollection $assetCollection
-     * @param $after
+     * @param string $after
      * @return void
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -219,7 +226,13 @@ class ConfigPlugin
         $locale = $designParams['locale'];
 
         foreach ($files as $filePath) {
-            $destination = $this->generateCriticalJsAssets->getFileDestination(false, $area, $theme, $locale, $filePath);
+            $destination = $this->generateCriticalJsAssets->getFileDestination(
+                false,
+                $area,
+                $theme,
+                $locale,
+                $filePath
+            );
             if (!$this->fileDriver->isExists($destination)) {
                 continue;
             }

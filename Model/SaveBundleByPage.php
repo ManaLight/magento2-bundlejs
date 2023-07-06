@@ -58,8 +58,16 @@ class SaveBundleByPage implements SaveBundleByPageInterface
     /**
      * @inheritdoc
      */
-    public function execute($fullActionName, $pathInfo, $bundle, $critical = false, $config = null, $area = null, $theme = null, $locale = null)
-    {
+    public function execute(
+        $fullActionName,
+        $pathInfo,
+        $bundle,
+        $critical = false,
+        $config = null,
+        $area = null,
+        $theme = null,
+        $locale = null
+    ) {
         if (!$this->configHelper->canCollectBundleJsInAction()) {
             return [
                 'success' => false

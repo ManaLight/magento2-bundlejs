@@ -57,6 +57,9 @@ class Index extends Action
      */
     private $cacheManager;
 
+    /**
+     * @var string|null
+     */
     private $metadata = null;
 
     /**
@@ -91,6 +94,8 @@ class Index extends Action
     }
 
     /**
+     * Excecute.
+     *
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\Result\Redirect|\Magento\Framework\Controller\ResultInterface|\Magento\Framework\View\Result\Page
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
@@ -116,7 +121,9 @@ class Index extends Action
     }
 
     /**
-     * @param $autoCollectParam
+     * Excecute.
+     *
+     * @param string $autoCollectParam
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
@@ -161,7 +168,9 @@ class Index extends Action
     }
 
     /**
-     * @param $manualCollectParam
+     * Execute Manual.
+     *
+     * @param string $manualCollectParam
      * @return \Magento\Framework\Controller\Result\Redirect|\Magento\Framework\View\Result\Page
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
@@ -189,8 +198,10 @@ class Index extends Action
     }
 
     /**
-     * @param $key
-     * @param $lifetime
+     * Delete Cookie.
+     *
+     * @param string $key
+     * @param string $lifetime
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
@@ -201,7 +212,9 @@ class Index extends Action
     }
 
     /**
-     * @param $lifetime
+     * Get Metadata.
+     *
+     * @param string $lifetime
      * @return \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata|null
      */
     public function getMetadata($lifetime)
@@ -217,14 +230,15 @@ class Index extends Action
     }
 
     /**
-     * @TODO: Adding same site or strict attribute
+     * Save Cookie.
      *
-     * @param $key
-     * @param $param
-     * @param $lifetime
+     * @param string $key
+     * @param string $param
+     * @param string $lifetime
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
      * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
+     * @TODO: Adding same site or strict attribute
      */
     public function saveCookie($key, $param, $lifetime)
     {
@@ -233,8 +247,10 @@ class Index extends Action
     }
 
     /**
-     * @param $key
-     * @param $lifetime
+     * Delete Cookie and Redirect To Home.
+     *
+     * @param string $key
+     * @param string $lifetime
      * @return \Magento\Framework\Controller\Result\Redirect
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
@@ -247,6 +263,8 @@ class Index extends Action
     }
 
     /**
+     * Redirect To Home.
+     *
      * @return \Magento\Framework\Controller\Result\Redirect
      */
     public function redirectToHomepage()

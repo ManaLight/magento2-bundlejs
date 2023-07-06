@@ -37,6 +37,7 @@ class ClearBundles
 
     /**
      * ClearBundles constructor.
+     *
      * @param ResourceBundleByPage $resourceBundleByPage
      * @param ResourceBundleByType $resourceBundleByType
      * @param BundleByPageCollectionFactory $bundleByPageCollectionFactory
@@ -55,6 +56,8 @@ class ClearBundles
     }
 
     /**
+     * Execute.
+     *
      * @return bool
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
@@ -66,6 +69,8 @@ class ClearBundles
     }
 
     /**
+     * Clear Bundle By Pages.
+     *
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function clearBundleByPages()
@@ -81,6 +86,8 @@ class ClearBundles
     }
 
     /**
+     * Clear Bundle By Types.
+     *
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function clearBundleByTypes()

@@ -65,7 +65,9 @@ class UpdateDefaultBundleByTypes implements DataPatchInterface
     }
 
     /**
-     * @return false|void
+     * Apply
+     *
+     * @return bool|void
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function apply()
@@ -88,7 +90,9 @@ class UpdateDefaultBundleByTypes implements DataPatchInterface
     }
 
     /**
-     * @param $type
+     * Get Type Id.
+     *
+     * @param string $type
      * @return int|null
      */
     private function getTypeId($type)

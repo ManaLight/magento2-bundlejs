@@ -20,6 +20,8 @@ class SaveContextsConfig
     private $resourceContextsConfig;
 
     /**
+     * Construct.
+     *
      * @param CollectionFactory $collectionFactory
      * @param ResourceContextsConfig $resourceContextsConfig
      */
@@ -32,7 +34,9 @@ class SaveContextsConfig
     }
 
     /**
-     * @param $config
+     * Execute.
+     *
+     * @param string $config
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function execute($config)

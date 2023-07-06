@@ -1,9 +1,12 @@
 <?php
-
-use PureMashiro\BundleJs\Model\AutoCollect;
-use PureMashiro\BundleJs\Model\ManualCollect;
+/**
+ * Copyright Pure Mashiro. All rights reserved.
+ * @author Mana Light
+ */
 
 /** @var \PureMashiro\BundleJs\Block\BundleJs $block */
+/** @var \Magento\Framework\Escaper $escaper */
+
 if (!$block->canCollectBundle()) {
     return;
 }
@@ -13,30 +16,56 @@ $designParams = $block->getDesignParams();
 $area = $designParams['area'];
 $theme = $designParams['themeModel']->getThemePath();
 $locale = $designParams['locale'];
+$autoCollect = $block->getAutoCollectData();
+$manualCollect = $block->getManualCollectData();
 ?>
 <div id="advanced-bundle-wrapper">
     <?php if ($block->canAutoCollect()): ?>
         <div id="cancel-collect-bundle" class="action" style="display: none;">
-            <span class="button"><strong><a href="<?= $block->getAutoCollectCancellingUrl() ?>"><?= __('Cancel'); ?></a></strong></span>
-            <span class="inactive"><?= __('Auto-collecting is in progress. Please wait...'); ?></span>
+            <span class="button">
+                <strong>
+                    <a href="<?= $escaper->escapeUrl($block->getAutoCollectCancellingUrl()) ?>">
+                        <?= $escaper->escapeHtml(__('Cancel')); ?>
+                    </a>
+                </strong>
+            </span>
+            <span class="inactive">
+                <?= $escaper->escapeHtml(__('Auto-collecting is in progress. Please wait...')); ?>
+            </span>
         </div>
     <?php else: ?>
         <div id="collect-manual-warper" style="display: none;">
             <div id="collect-bundle" class="action">
-                <span class="button"><strong><?= __('Collect'); ?></strong></span>
+                <span class="button">
+                    <strong><?= $escaper->escapeHtml(__('Collect')); ?></strong>
+                </span>
                 <?php foreach ($types as $type): ?>
                     <span>
-                        <?= $type->getType(); ?>
+                        <?= $escaper->escapeHtml($type->getType()); ?>
                     </span>
                 <?php endforeach; ?>
             </div>
             <div id="populate-bundle" class="action">
-                <span class="button"><strong><?= __('Populate'); ?></strong></span>
-                <span><?= __('Common') ?></span>
+                <span class="button">
+                    <strong>
+                        <?= $escaper->escapeHtml(__('Populate')); ?>
+                    </strong>
+                </span>
+                <span>
+                    <?= $escaper->escapeHtml(__('Common')) ?>
+                </span>
             </div>
             <div id="clear-bundles" class="action">
-                <span class="button"><strong><?= __('Clear'); ?></strong></span>
-                <span class="button"><strong><a href="<?= $block->getManualCollectCancellingUrl() ?>"><?= __('Cancel'); ?></a></strong></span>
+                <span class="button">
+                    <strong><?= $escaper->escapeHtml(__('Clear')); ?></strong>
+                </span>
+                <span class="button">
+                    <strong>
+                        <a href="<?= $escaper->escapeUrl($block->getManualCollectCancellingUrl()) ?>">
+                            <?= $escaper->escapeHtml(__('Cancel')); ?>
+                        </a>
+                    </strong>
+                </span>
             </div>
         </div>
     <?php endif; ?>
@@ -80,7 +109,7 @@ $locale = $designParams['locale'];
                 collectBundleAction: function (critical = false) {
                     var jsArr = aggregateObj.getJsArr(),
                         htmlArr = aggregateObj.getHtmlArr(),
-                        fullActionName = '<?= $block->getRequest()->getFullActionName(); ?>',
+                        fullActionName = '<?= $escaper->escapeHtml($block->getRequest()->getFullActionName()) ?>',
                         contextsConfig,
                         bundle;
 
@@ -89,18 +118,18 @@ $locale = $designParams['locale'];
                     bundle = jsArr.concat(htmlArr);
 
                     $.ajax({
-                        url: '<?= $block->getUrl('rest/V1/saveBundleByPage') ?>',
+                        url: '<?= $escaper->escapeUrl($block->getUrl('rest/V1/saveBundleByPage')) ?>',
                         type: 'POST',
                         showLoader: true,
                         data: JSON.stringify({
                             fullActionName: fullActionName,
-                            pathInfo: '<?= $block->getRequest()->getOriginalPathInfo(); ?>',
+                            pathInfo: '<?= $escaper->escapeHtml($block->getRequest()->getOriginalPathInfo()) ?>',
                             bundle: bundle,
                             critical: critical,
                             config: contextsConfig,
-                            area: '<?= $area ?>',
-                            theme: '<?= $theme ?>',
-                            locale: '<?= $locale ?>'
+                            area: '<?= $escaper->escapeHtml($area) ?>',
+                            theme: '<?= $escaper->escapeHtml($theme) ?>',
+                            locale: '<?= $escaper->escapeHtml($locale) ?>'
                         }),
                         contentType: 'application/json'
                     }).done(function (result) {
@@ -113,7 +142,7 @@ $locale = $designParams['locale'];
                 },
                 populateBundleAction: function () {
                     $.ajax({
-                        url: '<?= $block->getUrl('rest/V1/populateBundleType') ?>',
+                        url: '<?= $escaper->escapeUrl($block->getUrl('rest/V1/populateBundleType')) ?>',
                         type: 'POST',
                         showLoader: true,
                         contentType: 'application/json'
@@ -122,7 +151,7 @@ $locale = $designParams['locale'];
                 },
                 clearBundleAction: function () {
                     $.ajax({
-                        url: '<?= $block->getUrl('rest/V1/clearBundles') ?>',
+                        url: '<?= $escaper->escapeUrl($block->getUrl('rest/V1/clearBundles')) ?>',
                         type: 'POST',
                         showLoader: true,
                         contentType: 'application/json',
@@ -174,9 +203,9 @@ $locale = $designParams['locale'];
 
             // Auto collect bundle Start
             // If auto collect key is existed, check current page, collect if possible, then travel pages in order
-            var autoCollectKey = '<?= AutoCollect::IDENTIFIER ?>';
-            var phase = '<?= AutoCollect::PHASE ?>';
-            var phaseValue2 = '<?= AutoCollect::PHASE_VALUE_2 ?>';
+            var autoCollectKey = '<?= $escaper->escapeHtml($autoCollect['identifier']) ?>';
+            var phase = '<?= $escaper->escapeHtml($autoCollect['phase']) ?>';
+            var phaseValue2 = '<?= $escaper->escapeHtml($autoCollect['phase_value_2']) ?>';
             var autoCollectValue = $.mage.cookies.get(autoCollectKey);
 
             if (autoCollectValue) {
@@ -186,7 +215,7 @@ $locale = $designParams['locale'];
             // Auto collect bundle End
             <?php else: ?>
             // Show manual collect actions Start
-            var manualCollectKey = '<?= ManualCollect::IDENTIFIER ?>';
+            var manualCollectKey = '<?= $escaper->escapeHtml($manualCollect['identifier']) ?>';
             var manualCollectValue = $.mage.cookies.get(manualCollectKey);
 
             if (manualCollectValue) {

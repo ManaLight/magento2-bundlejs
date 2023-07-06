@@ -72,6 +72,7 @@ class Data
 
     /**
      * Data constructor.
+     *
      * @param Filesystem $filesystem
      * @param BundleInterfaceFactory $bundleFactory
      * @param Files $utilityFiles
@@ -105,6 +106,8 @@ class Data
     }
 
     /**
+     * Get Bundle Factory.
+     *
      * @return BundleInterfaceFactory
      */
     public function getBundleFactory()
@@ -113,6 +116,8 @@ class Data
     }
 
     /**
+     * Get Public Static Dir.
+     *
      * @return Filesystem\Directory\WriteInterface
      */
     public function getPubStaticDir()
@@ -121,6 +126,8 @@ class Data
     }
 
     /**
+     * Get Utility Files.
+     *
      * @return Files
      */
     public function getUtilityFiles()
@@ -129,6 +136,8 @@ class Data
     }
 
     /**
+     * Get File.
+     *
      * @return File|null
      */
     public function getFile()
@@ -137,6 +146,8 @@ class Data
     }
 
     /**
+     * Get Bundle Registry.
+     *
      * @return BundleRegistry
      */
     public function getBundleRegistry()
@@ -145,7 +156,9 @@ class Data
     }
 
     /**
-     * @param $type
+     * Get Bundle Content By Type.
+     *
+     * @param string $type
      * @return array|bool|float|int|string|null
      */
     public function getBundleContentByType($type)
@@ -163,7 +176,9 @@ class Data
     }
 
     /**
-     * @param $sourcePath
+     * File exists.
+     *
+     * @param string $sourcePath
      * @return bool
      */
     public function fileExists($sourcePath)
@@ -177,6 +192,8 @@ class Data
     }
 
     /**
+     * Get Public Media Dir.
+     *
      * @return Filesystem\Directory\WriteInterface
      */
     public function getPubMediaDir()

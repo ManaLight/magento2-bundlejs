@@ -64,6 +64,8 @@ class DeferInternalJsPlugin
     }
 
     /**
+     * After Render Result.
+     *
      * @param Layout $subject
      * @param Layout $result
      * @param ResponseInterface $httpResponse

@@ -11,8 +11,10 @@ defined('MAX_FILE_SIZE') || define('MAX_FILE_SIZE', 1000000);
 class DeferJsReplacer extends \DOMUtilForWebP\ImageUrlReplacer
 {
     /**
-     * @param $html
-     * @param null $storage
+     * Replace Html.
+     *
+     * @param string $html
+     * @param mixed|null $storage
      * @return mixed|string
      */
     public function replaceHtml($html, $storage = null)
@@ -29,7 +31,6 @@ class DeferJsReplacer extends \DOMUtilForWebP\ImageUrlReplacer
         $dom = $storage !== null && $storage->getDomContent() ?
             $storage->getDomContent() : HtmlDomParser::str_get_html($html, false, false, 'UTF-8', false);
         //$dom = str_get_html($html, false, false, 'UTF-8', false);
-
 
         // MAX_FILE_SIZE is defined in simple_html_dom.
         // For safety sake, we make sure it is defined before using
@@ -81,7 +82,9 @@ class DeferJsReplacer extends \DOMUtilForWebP\ImageUrlReplacer
     }
 
     /**
-     * @param $dom
+     * Add Defer Outer JS.
+     *
+     * @param string $dom
      */
     private function addDeferOuterJS($dom): void
     {
@@ -94,8 +97,10 @@ class DeferJsReplacer extends \DOMUtilForWebP\ImageUrlReplacer
     }
 
     /**
-     * @param $innerText
-     * @param $exclusion
+     * Can Not Defer Inner.
+     *
+     * @param string $innerText
+     * @param array $exclusion
      * @return bool
      */
     private function canNotDeferInner($innerText, $exclusion): bool
@@ -110,6 +115,8 @@ class DeferJsReplacer extends \DOMUtilForWebP\ImageUrlReplacer
     }
 
     /**
+     * Get Defer Inner Exclusion.
+     *
      * @param HelperDeferJsReplacer $helperDeferJsReplacer
      * @return array|string[]
      */
@@ -119,8 +126,10 @@ class DeferJsReplacer extends \DOMUtilForWebP\ImageUrlReplacer
     }
 
     /**
-     * @param $elem
-     * @param $exclusion
+     * Can not defer Outer.
+     *
+     * @param string    $elem
+     * @param array     $exclusion
      * @return bool
      */
     private function canNotDeferOuter($elem, $exclusion): bool
@@ -140,6 +149,8 @@ class DeferJsReplacer extends \DOMUtilForWebP\ImageUrlReplacer
     }
 
     /**
+     * Get defer outer exclusion.
+     *
      * @param HelperDeferJsReplacer $helperDeferJsReplacer
      * @return array|string[]
      */

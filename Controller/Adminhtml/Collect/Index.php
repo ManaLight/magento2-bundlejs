@@ -44,6 +44,8 @@ class Index extends Action
     }
 
     /**
+     * Execute.
+     *
      * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
      */
     public function execute()
@@ -64,6 +66,8 @@ class Index extends Action
     }
 
     /**
+     * Generate Random String.
+     *
      * @param int $length
      * @return string
      */
