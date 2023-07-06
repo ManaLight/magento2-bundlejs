@@ -1,10 +1,16 @@
 <?php
+/**
+ * Copyright Pure Mashiro. All rights reserved.
+ * @author Mana Light
+ */
+
 /** @var \PureMashiro\BundleJs\Block\BundleJs $block */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 <script excluded-defer="1">
     require(['jquery', 'Magento_Customer/js/customer-data'], function ($) {
         var storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
         storage.removeAll();
-        window.location.href = '<?= $block->getBaseUrl()?>';
+        window.location.href = '<?= $escaper->escapeUrl($block->getBaseUrl()) ?>';
     });
 </script>

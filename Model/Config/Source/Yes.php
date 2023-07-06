@@ -24,4 +24,3 @@ class Yes implements \Magento\Framework\Data\OptionSourceInterface
         return [1 => __('Yes')];
     }
 }
-

@@ -13,6 +13,7 @@ use Magento\Theme\Model\View\Design;
 use PureMashiro\BundleJs\Helper\Config as ConfigHelper;
 use PureMashiro\BundleJs\Helper\NextPage;
 use PureMashiro\BundleJs\Model\AutoCollect;
+use PureMashiro\BundleJs\Model\ManualCollect;
 use PureMashiro\BundleJs\Model\BundleByType as ModelBundleByType;
 use PureMashiro\BundleJs\Model\ResourceModel\BundleByPage as ResourceBundleByPage;
 use PureMashiro\BundleJs\Model\ResourceModel\BundleByType as ResourceBundleByType;
@@ -66,6 +67,8 @@ class BundleJs extends Template
     }
 
     /**
+     * Can Collect Bundle.
+     *
      * @return bool
      */
     public function canCollectBundle()
@@ -80,6 +83,8 @@ class BundleJs extends Template
     }
 
     /**
+     * Can Auto Collect.
+     *
      * @return bool
      */
     public function canAutoCollect()
@@ -88,6 +93,34 @@ class BundleJs extends Template
     }
 
     /**
+     * Get Auto Collect data
+     *
+     * @return array
+     */
+    public function getAutoCollectData()
+    {
+        return [
+            'identifier'    => AutoCollect::IDENTIFIER,
+            'phase'         => AutoCollect::PHASE,
+            'phase_value_2' => AutoCollect::PHASE_VALUE_2
+        ];
+    }
+
+    /**
+     * Get Manual Collect data
+     *
+     * @return array
+     */
+    public function getManualCollectData()
+    {
+        return [
+            'identifier'    => ManualCollect::IDENTIFIER
+        ];
+    }
+
+    /**
+     * Get All Bundle Types.
+     *
      * @return ResourceBundleByType\Collection
      */
     public function getAllBundleTypes()
@@ -105,6 +138,8 @@ class BundleJs extends Template
     }
 
     /**
+     * Is Commoin Exist.
+     *
      * @return bool
      */
     public function isCommonExist(): bool
@@ -121,7 +156,9 @@ class BundleJs extends Template
     }
 
     /**
-     * @param $type
+     * Is Page Matched
+     *
+     * @param string $type
      * @return bool
      */
     public function isPageMatched($type)
@@ -132,7 +169,9 @@ class BundleJs extends Template
     }
 
     /**
-     * @param $types
+     * Has Empty Bundle Page.
+     *
+     * @param string $types
      * @return bool
      */
     public function hasEmptyBundlePage($types)
@@ -153,6 +192,8 @@ class BundleJs extends Template
     }
 
     /**
+     * Get Auto Collect Cancelling Url.
+     *
      * @return string
      */
     public function getAutoCollectCancellingUrl()
@@ -161,6 +202,8 @@ class BundleJs extends Template
     }
 
     /**
+     * Get Manual Collect Cancelling Url.
+     *
      * @return string
      */
     public function getManualCollectCancellingUrl()
@@ -169,6 +212,8 @@ class BundleJs extends Template
     }
 
     /**
+     * Get Design Params.
+     *
      * @return array
      */
     public function getDesignParams()

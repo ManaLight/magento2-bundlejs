@@ -37,6 +37,7 @@ class FileManager
 
     /**
      * FileManager constructor.
+     *
      * @param AppState $appState
      * @param Filesystem $filesystem
      * @param AssetRepo $assetRepo
@@ -55,6 +56,8 @@ class FileManager
     }
 
     /**
+     * Get App State.
+     *
      * @return AppState
      */
     public function getAppState()
@@ -63,6 +66,8 @@ class FileManager
     }
 
     /**
+     * Get Filesystem.
+     *
      * @return Filesystem
      */
     public function getFilesystem()
@@ -71,6 +76,8 @@ class FileManager
     }
 
     /**
+     * Get Asset Repo.
+     *
      * @return AssetRepo
      */
     public function getAssetRepo()
@@ -79,6 +86,8 @@ class FileManager
     }
 
     /**
+     * Get Bundle Types Action.
+     *
      * @return GetBundleTypes
      */
     public function getBundleTypesAction()
