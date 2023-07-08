@@ -16,6 +16,8 @@ class Collection extends AbstractCollection
 {
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     protected function _construct()
     {

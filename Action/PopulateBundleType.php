@@ -21,12 +21,12 @@ class PopulateBundleType
     /**
      * @var BundleByPageCollectionFactory
      */
-    private $bundleByPageCollectionFactory;
+    private $bundleByPage;
 
     /**
      * @var BundleByTypeCollectionFactory
      */
-    private $bundleByTypeCollectionFactory;
+    private $bundleByType;
 
     /**
      * @var SerializerInterface
@@ -48,27 +48,30 @@ class PopulateBundleType
      */
     private $bundleByTypeFactory;
 
+    /**
+     * @var string|null
+     */
     private $allBundleByTypes = null;
 
     /**
      * PopulateBundleType constructor.
-     * @param BundleByPageCollectionFactory $bundleByPageCollectionFactory
-     * @param BundleByTypeCollectionFactory $bundleByTypeCollectionFactory
+     * @param BundleByPageCollectionFactory $bundleByPage
+     * @param BundleByTypeCollectionFactory $bundleByType
      * @param SerializerInterface $serializer
      * @param ResourceBundleByType $resourceBundleByType
      * @param ConfigHelper $configHelper
      * @param BundleByTypeFactory $bundleByTypeFactory
      */
     public function __construct(
-        BundleByPageCollectionFactory $bundleByPageCollectionFactory,
-        BundleByTypeCollectionFactory $bundleByTypeCollectionFactory,
+        BundleByPageCollectionFactory $bundleByPage,
+        BundleByTypeCollectionFactory $bundleByType,
         SerializerInterface           $serializer,
         ResourceBundleByType          $resourceBundleByType,
         ConfigHelper                  $configHelper,
         BundleByTypeFactory           $bundleByTypeFactory
     ) {
-        $this->bundleByPageCollectionFactory = $bundleByPageCollectionFactory;
-        $this->bundleByTypeCollectionFactory = $bundleByTypeCollectionFactory;
+        $this->bundleByPage = $bundleByPage;
+        $this->bundleByType = $bundleByType;
         $this->serializer = $serializer;
         $this->resourceBundleByType = $resourceBundleByType;
         $this->configHelper = $configHelper;
@@ -76,16 +79,20 @@ class PopulateBundleType
     }
 
     /**
-     * @param false $critical
+     * Execute.
+     *
+     * @param bool $critical
      * @return bool
      * @throws \Magento\Framework\Exception\AlreadyExistsException
+     *
+     * @SuppressWarnings(PHPMD)
      */
     public function execute($critical = false)
     {
         $allTypeIds = $this->getAllBundleTypeIds($critical);
 
         /** @var \PureMashiro\BundleJs\Model\ResourceModel\BundleByPage\Collection $collection */
-        $collection = $this->bundleByPageCollectionFactory->create();
+        $collection = $this->bundleByPage->create();
         $collection
             ->addFieldToFilter('type_id', ['in' => $allTypeIds])
             ->addFieldToFilter('use_in_common', 1)
@@ -130,17 +137,23 @@ class PopulateBundleType
     }
 
     /**
-     * @param false $critical
+     * Get All Bundle Type Ids.
+     *
+     * @param bool $critical
      * @return array
+     *
+     * @SuppressWarnings(PHPMD)
      */
     public function getAllBundleTypeIds($critical = false)
     {
         /** @var \PureMashiro\BundleJs\Model\ResourceModel\BundleByType\Collection $collection */
-        $collection = $this->bundleByTypeCollectionFactory->create();
+        $collection = $this->bundleByType->create();
 
         if ($critical) {
             $collection->addFieldToFilter('type', ['like' => 'critical_%']);
-        } else {
+        }
+        
+        if (!$critical) {
             $collection->addFieldToFilter('type', ['nlike' => 'critical_%']);
         }
 
@@ -148,7 +161,9 @@ class PopulateBundleType
     }
 
     /**
-     * @param $bundles
+     * Save Bundle Types.
+     *
+     * @param array $bundles
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function saveBundleTypes($bundles)
@@ -163,7 +178,9 @@ class PopulateBundleType
     }
 
     /**
-     * @param $typeName
+     * Get Bundle Type By Name.
+     *
+     * @param string $typeName
      * @return \Magento\Framework\DataObject|mixed|null
      */
     public function getBundleTypeByName($typeName)
@@ -182,6 +199,8 @@ class PopulateBundleType
     }
 
     /**
+     * Get All Bundle By Types.
+     *
      * @return \Magento\Framework\DataObject[]|null
      */
     public function getAllBundleByTypes()
@@ -190,20 +209,22 @@ class PopulateBundleType
             return $this->allBundleByTypes;
         }
 
-        $collection = $this->bundleByTypeCollectionFactory->create();
+        $collection = $this->bundleByType->create();
         return $this->allBundleByTypes = $collection->getItems();
     }
 
     /**
-     * @return false|void
+     * Populate Non Critical Bundles.
+     *
+     * @return bool|void
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function populateNonCriticalBundles()
     {
-        $nonCriticalBundleTypes = $this->getNonCriticalBundleTypes();
+        $nonCritical = $this->getNonCriticalBundleTypes();
 
         /** @var \PureMashiro\BundleJs\Model\ResourceModel\BundleByPage\Collection $collection */
-        $collection = $this->bundleByPageCollectionFactory->create();
+        $collection = $this->bundleByPage->create();
         $collection->addFieldToFilter('enable', 1);
         $collection->getSelect()->join(
             ['type' => $collection->getTable(ResourceBundleByType::TABLE_NAME_BUNDLE_BY_TYPE)],
@@ -223,7 +244,7 @@ class PopulateBundleType
             $bundleByTypes[$type] = $bundle;
         }
 
-        foreach ($nonCriticalBundleTypes as $type) {
+        foreach ($nonCritical as $type) {
             $criticalType = 'critical_' . $type;
             $nonCriticalType = 'noncritical_' . $type;
 
@@ -243,6 +264,8 @@ class PopulateBundleType
     }
 
     /**
+     * Get Non Critical Bundle Types.
+     *
      * @return array
      */
     public function getNonCriticalBundleTypes()

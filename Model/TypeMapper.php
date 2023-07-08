@@ -25,6 +25,7 @@ class TypeMapper
         self::CHECKOUT_CART_INDEX => BundleByType::TYPE_CART,
         self::CHECKOUT_INDEX_INDEX => BundleByType::TYPE_CHECKOUT
     ];
+
     /**
      * @var ConfigHelper
      */
@@ -32,6 +33,7 @@ class TypeMapper
 
     /**
      * TypeMapper constructor.
+     *
      * @param ConfigHelper $configHelper
      */
     public function __construct(
@@ -41,10 +43,16 @@ class TypeMapper
     }
 
     /**
-     * @param $fullActionName
-     * @param $pathInfo
-     * @param bool $full
+     * Map.
+     *
+     * @param string $fullActionName
+     * @param string $pathInfo
+     * @param bool   $full
      * @return mixed|null
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD)
+     * @TODO: refactor into new functions to reduce the complexity of this one.
      */
     public function map($fullActionName, $pathInfo, $full = false)
     {
@@ -69,6 +77,8 @@ class TypeMapper
     }
 
     /**
+     * Get Mapper.
+     *
      * @return array
      */
     public function getMapper()
@@ -80,7 +90,9 @@ class TypeMapper
             $configPath = $this->configHelper->getAutoCollectPath($type);
             if (!empty($configPath)) {
                 $mapper[$configPath] = $type;
-            } else {
+            }
+
+            if (empty($configPath)) {
                 $key = array_search($type, self::MAPPER);
                 if (empty($key)) {
                     continue;

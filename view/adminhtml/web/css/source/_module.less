@@ -1,14 +1,17 @@
-/*
- *  Copyright Pure Mashiro. All rights reserved.
- *  @author Mana Light
- */
+// phpcs:ignoreFile
 
-.bundle_js.collect_bundle {
-  a {
-    text-decoration: none;
-    color: #514943;
-    &:visited {
-      color: #514943;
+@colorBundle: #514943;
+
+& when (@media-common =true) {
+    .bundle_js {
+        &.collect_bundle {
+            a {
+                color: @colorBundle;
+                text-decoration: none;
+                &:visited {
+                    color: @colorBundle;
+                }
+            }
+        }
     }
-  }
 }

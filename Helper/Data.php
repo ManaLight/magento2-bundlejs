@@ -53,7 +53,7 @@ class Data
     /**
      * @var BundleByTypeCollectionFactory
      */
-    private $bundleByTypeCollectionFactory;
+    private $bundleByType;
 
     /**
      * @var File|null
@@ -72,11 +72,12 @@ class Data
 
     /**
      * Data constructor.
+     *
      * @param Filesystem $filesystem
      * @param BundleInterfaceFactory $bundleFactory
      * @param Files $utilityFiles
      * @param BundleRegistry $bundleRegistry
-     * @param BundleByTypeCollectionFactory $bundleByTypeCollectionFactory
+     * @param BundleByTypeCollectionFactory $bundleByType
      * @param Minification $minification
      * @param SerializerInterface|null $serializer
      * @param File|null $file
@@ -87,7 +88,7 @@ class Data
         BundleInterfaceFactory $bundleFactory,
         Files $utilityFiles,
         BundleRegistry $bundleRegistry,
-        BundleByTypeCollectionFactory $bundleByTypeCollectionFactory,
+        BundleByTypeCollectionFactory $bundleByType,
         Minification $minification,
         SerializerInterface $serializer = null,
         File $file = null
@@ -98,13 +99,15 @@ class Data
         $this->bundleFactory = $bundleFactory;
         $this->utilityFiles = $utilityFiles;
         $this->bundleRegistry = $bundleRegistry;
-        $this->bundleByTypeCollectionFactory = $bundleByTypeCollectionFactory;
+        $this->bundleByType = $bundleByType;
         $this->file = $file ?: ObjectManager::getInstance()->get(File::class);
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->minification = $minification;
     }
 
     /**
+     * Get Bundle Factory.
+     *
      * @return BundleInterfaceFactory
      */
     public function getBundleFactory()
@@ -113,6 +116,8 @@ class Data
     }
 
     /**
+     * Get Public Static Dir.
+     *
      * @return Filesystem\Directory\WriteInterface
      */
     public function getPubStaticDir()
@@ -121,6 +126,8 @@ class Data
     }
 
     /**
+     * Get Utility Files.
+     *
      * @return Files
      */
     public function getUtilityFiles()
@@ -129,6 +136,8 @@ class Data
     }
 
     /**
+     * Get File.
+     *
      * @return File|null
      */
     public function getFile()
@@ -137,6 +146,8 @@ class Data
     }
 
     /**
+     * Get Bundle Registry.
+     *
      * @return BundleRegistry
      */
     public function getBundleRegistry()
@@ -145,13 +156,15 @@ class Data
     }
 
     /**
-     * @param $type
+     * Get Bundle Content By Type.
+     *
+     * @param string $type
      * @return array|bool|float|int|string|null
      */
     public function getBundleContentByType($type)
     {
         /** @var \PureMashiro\BundleJs\Model\ResourceModel\BundleByType\Collection $collection */
-        $collection = $this->bundleByTypeCollectionFactory->create();
+        $collection = $this->bundleByType->create();
         $collection->addFieldToFilter('type', $type);
         if ($collection->getSize()) {
             $bundle = $collection->getFirstItem();
@@ -163,7 +176,9 @@ class Data
     }
 
     /**
-     * @param $sourcePath
+     * File exists.
+     *
+     * @param string $sourcePath
      * @return bool
      */
     public function fileExists($sourcePath)
@@ -177,6 +192,8 @@ class Data
     }
 
     /**
+     * Get Public Media Dir.
+     *
      * @return Filesystem\Directory\WriteInterface
      */
     public function getPubMediaDir()

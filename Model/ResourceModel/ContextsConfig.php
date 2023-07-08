@@ -12,6 +12,8 @@ class ContextsConfig extends AbstractDb
 
     /**
      * @inheritDoc
+     *
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     protected function _construct()
     {

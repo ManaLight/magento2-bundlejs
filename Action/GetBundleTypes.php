@@ -47,6 +47,8 @@ class GetBundleTypes
     }
 
     /**
+     * Execute.
+     *
      * @return array
      */
     public function execute()

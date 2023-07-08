@@ -22,6 +22,17 @@ interface SaveBundleByPageInterface
      * @param string|null $theme
      * @param string|null $locale
      * @return array
+     *
+     * @SuppressWarnings(PHPMD)
      */
-    public function execute($fullActionName, $pathInfo, $bundle, $critical = false, $config = null, $area = null, $theme = null, $locale = null);
+    public function execute(
+        $fullActionName,
+        $pathInfo,
+        $bundle,
+        $critical = false,
+        $config = null,
+        $area = null,
+        $theme = null,
+        $locale = null
+    );
 }

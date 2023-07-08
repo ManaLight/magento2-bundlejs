@@ -38,6 +38,8 @@ class BundleByType extends AbstractModel
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     protected function _construct()
     {
@@ -45,6 +47,8 @@ class BundleByType extends AbstractModel
     }
 
     /**
+     * Get Default Types.
+     *
      * @return string[]
      */
     public function getDefaultTypes()

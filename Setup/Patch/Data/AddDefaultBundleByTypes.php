@@ -25,6 +25,12 @@ class AddDefaultBundleByTypes implements DataPatchInterface
      */
     private $resourceBundleByType;
 
+    /**
+     * Construct.
+     *
+     * @param BundleByTypeFactory  $bundleByTypeFactory
+     * @param ResourceBundleByType $resourceBundleByType
+     */
     public function __construct(
         BundleByTypeFactory  $bundleByTypeFactory,
         ResourceBundleByType $resourceBundleByType
@@ -50,6 +56,8 @@ class AddDefaultBundleByTypes implements DataPatchInterface
     }
 
     /**
+     * Apply.
+     *
      * @return AddDefaultBundleByTypes|void
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
@@ -59,6 +67,8 @@ class AddDefaultBundleByTypes implements DataPatchInterface
     }
 
     /**
+     * Add Default Bundle By Types.
+     *
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     private function addDefaultBundleByTypes()

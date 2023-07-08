@@ -24,6 +24,9 @@ use PureMashiro\BundleJs\Model\FileManager;
 use PureMashiro\BundleJs\Model\TypeMapper;
 use PureMashiro\BundleJs\Model\Validator\IsAllowedStaticPage;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConfigPlugin
 {
     /**
@@ -54,7 +57,7 @@ class ConfigPlugin
     /**
      * @var GenerateCriticalJsAssets
      */
-    private $generateCriticalJsAssets;
+    private $generateCriticaL;
 
     /**
      * @var Design
@@ -87,12 +90,14 @@ class ConfigPlugin
      * @param Minification $minification
      * @param ConfigHelper $configHelper
      * @param AssetConfig $assetConfig
-     * @param GenerateCriticalJsAssets $generateCriticalJsAssets
+     * @param GenerateCriticalJsAssets $generateCriticaL
      * @param Design $design
      * @param FileDriver $fileDriver
      * @param RequestInterface $request
      * @param TypeMapper $typeMapper
      * @param IsAllowedStaticPage $isAllowedStaticPage
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         FileManager              $fileManager,
@@ -100,7 +105,7 @@ class ConfigPlugin
         Minification             $minification,
         ConfigHelper             $configHelper,
         AssetConfig              $assetConfig,
-        GenerateCriticalJsAssets $generateCriticalJsAssets,
+        GenerateCriticalJsAssets $generateCriticaL,
         Design                   $design,
         FileDriver               $fileDriver,
         RequestInterface         $request,
@@ -112,7 +117,7 @@ class ConfigPlugin
         $this->minification = $minification;
         $this->configHelper = $configHelper;
         $this->assetConfig = $assetConfig;
-        $this->generateCriticalJsAssets = $generateCriticalJsAssets;
+        $this->generateCriticaL = $generateCriticaL;
         $this->design = $design;
         $this->fileDriver = $fileDriver;
         $this->request = $request;
@@ -121,9 +126,13 @@ class ConfigPlugin
     }
 
     /**
+     * Set After Layout
+     *
      * @param HeadConfig $subject
-     * @param $result
+     * @param mixed $result
      * @return mixed
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function afterSetLayout(HeadConfig $subject, $result)
     {
@@ -143,9 +152,13 @@ class ConfigPlugin
 
         $assetCollection = $this->pageConfig->getAssetCollection();
 
-        if ($this->configHelper->isDisableBundlesOnStaticPages() && $this->isAllowedStaticPage->validate($subject->getLayout())) {
+        if ($this->configHelper->isDisableBundlesOnStaticPages()
+            && $this->isAllowedStaticPage->validate($subject->getLayout())) {
             $this->insertCriticalJsAssets($assetCollection, $after);
-        } else {
+        }
+        
+        if (!$this->configHelper->isDisableBundlesOnStaticPages()
+        && !$this->isAllowedStaticPage->validate($subject->getLayout())) {
             $bundleAssets = $this->fileManager->createBundleJsPool();
             $staticAsset = $this->fileManager->createStaticJsAsset();
             /** @var \Magento\Framework\View\Asset\File $bundleAsset */
@@ -219,7 +232,7 @@ class ConfigPlugin
         $locale = $designParams['locale'];
 
         foreach ($files as $filePath) {
-            $destination = $this->generateCriticalJsAssets->getFileDestination(false, $area, $theme, $locale, $filePath);
+            $destination = $this->generateCriticaL->getFileDestination(false, $area, $theme, $locale, $filePath);
             if (!$this->fileDriver->isExists($destination)) {
                 continue;
             }

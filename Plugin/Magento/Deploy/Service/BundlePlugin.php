@@ -42,7 +42,7 @@ class BundlePlugin
     /**
      * @var GenerateCriticalJsAssets
      */
-    private $generateCriticalJsAssets;
+    private $genCritJsAssets;
 
     /**
      * BundlePlugin constructor.
@@ -50,38 +50,45 @@ class BundlePlugin
      * @param BundleRegistry $bundleRegistry
      * @param TypeMapper $typeMapper
      * @param ConfigHelper $configHelper
-     * @param GenerateCriticalJsAssets $generateCriticalJsAssets
+     * @param GenerateCriticalJsAssets $genCritJsAssets
      */
     public function __construct(
         MashiroBundle $mashiroBundle,
         BundleRegistry $bundleRegistry,
         TypeMapper $typeMapper,
         ConfigHelper $configHelper,
-        GenerateCriticalJsAssets $generateCriticalJsAssets
+        GenerateCriticalJsAssets $genCritJsAssets
     ) {
         $this->mashiroBundle = $mashiroBundle;
         $this->bundleRegistry = $bundleRegistry;
         $this->typeMapper = $typeMapper;
         $this->configHelper = $configHelper;
-        $this->generateCriticalJsAssets = $generateCriticalJsAssets;
+        $this->genCritJsAssets = $genCritJsAssets;
     }
 
     /**
+     * After Deploy.
+     *
      * @param MagentoBundle $subject
-     * @param $result
-     * @param $area
-     * @param $theme
-     * @param $locale
+     * @param mixed         $result
+     * @param string        $area
+     * @param string        $theme
+     * @param string        $locale
      * @return mixed
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function afterDeploy(MagentoBundle $subject, $result, $area, $theme, $locale)
     {
-        if (!$this->configHelper->canGenerateStaticBundleJs() || $subject instanceof MashiroBundle || $area !== Area::AREA_FRONTEND) {
+        // Check if static bundle generation is enabled and the current subject is not MashiroBundle
+        if (!$this->configHelper->canGenerateStaticBundleJs()
+            || $subject instanceof MashiroBundle
+            || $area !== Area::AREA_FRONTEND
+        ) {
             return $result;
         }
 
+        // Define the types of bundles to deploy
         $types = array_values($this->typeMapper->getMapper());
         $types[] = BundleByType::TYPE_COMMON;
 
@@ -95,14 +102,15 @@ class BundlePlugin
         $types[] = 'noncritical_' . BundleByType::TYPE_CATEGORY;
         $types[] = 'noncritical_' . BundleByType::TYPE_PRODUCT;
 
+        // Deploy bundles for each type
         foreach ($types as $type) {
             $this->bundleRegistry->startDeployAdvancedBundle($type);
             $this->mashiroBundle->deploy($area, $theme, $locale);
             $this->bundleRegistry->endDeployAdvancedBundle();
         }
 
-        // generate critical js for each page type
-        $this->generateCriticalJsAssets->execute($area, $theme, $locale);
+        // Generate critical js for each page type
+        $this->genCritJsAssets->execute($area, $theme, $locale);
 
         return $result;
     }

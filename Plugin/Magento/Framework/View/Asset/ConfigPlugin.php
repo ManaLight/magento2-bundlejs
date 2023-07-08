@@ -24,12 +24,17 @@ class ConfigPlugin
     }
 
     /**
-     * @param AssetConfig $subject
-     * @param $result
+     * After Is Merge Js Files.
+     *
+     * @param AssetConfig  $subject
+     * @param mixed        $result
      * @return false|mixed
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterIsMergeJsFiles(AssetConfig $subject, $result)
     {
-        return $this->configHelper->canBundleJsInStorefront() || $this->configHelper->canCollectBundleJs() ? false : $result;
+        return $this->configHelper->canBundleJsInStorefront()
+            || $this->configHelper->canCollectBundleJs() ? false : $result;
     }
 }

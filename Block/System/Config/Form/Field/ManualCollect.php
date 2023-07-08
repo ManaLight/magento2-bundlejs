@@ -14,6 +14,8 @@ class ManualCollect extends Collect
 {
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     protected function _construct()
     {

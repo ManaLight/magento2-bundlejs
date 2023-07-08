@@ -30,6 +30,7 @@ class GetNextPage
 
     /**
      * GetNextPage constructor.
+     *
      * @param NextPage $nextPage
      * @param UrlInterface $url
      * @param PopulateBundleType $populateBundleType
@@ -45,10 +46,14 @@ class GetNextPage
     }
 
     /**
-     * @param $type
-     * @param false $critical
+     * Execute.
+     *
+     * @param string $type
+     * @param bool $critical
      * @return string|null
      * @throws \Magento\Framework\Exception\AlreadyExistsException
+     *
+     * @SuppressWarnings(PHPMD)
      */
     public function execute($type, $critical = false)
     {

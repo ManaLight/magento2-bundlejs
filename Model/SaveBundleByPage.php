@@ -19,7 +19,7 @@ class SaveBundleByPage implements SaveBundleByPageInterface
     /**
      * @var ActionSaveBundleByPage
      */
-    private $actionSaveBundleByPage;
+    private $saveBundleByPage;
 
     /**
      * @var ConfigHelper
@@ -29,37 +29,47 @@ class SaveBundleByPage implements SaveBundleByPageInterface
     /**
      * @var ActionSaveContextsConfig
      */
-    private $actionSaveContextsConfig;
+    private $saveContextsConfig;
 
     /**
      * @var GenerateCriticalJsAssets
      */
-    private $generateCriticalJsAssets;
+    private $genCritJsAssets;
 
     /**
      * SaveBundleByPage constructor.
-     * @param ActionSaveBundleByPage $actionSaveBundleByPage
+     * @param ActionSaveBundleByPage $saveBundleByPage
      * @param ConfigHelper $configHelper
-     * @param ActionSaveContextsConfig $actionSaveContextsConfig
-     * @param GenerateCriticalJsAssets $generateCriticalJsAssets
+     * @param ActionSaveContextsConfig $saveContextsConfig
+     * @param GenerateCriticalJsAssets $genCritJsAssets
      */
     public function __construct(
-        ActionSaveBundleByPage   $actionSaveBundleByPage,
+        ActionSaveBundleByPage   $saveBundleByPage,
         ConfigHelper             $configHelper,
-        ActionSaveContextsConfig $actionSaveContextsConfig,
-        GenerateCriticalJsAssets $generateCriticalJsAssets
+        ActionSaveContextsConfig $saveContextsConfig,
+        GenerateCriticalJsAssets $genCritJsAssets
     ) {
-        $this->actionSaveBundleByPage = $actionSaveBundleByPage;
+        $this->saveBundleByPage = $saveBundleByPage;
         $this->configHelper = $configHelper;
-        $this->actionSaveContextsConfig = $actionSaveContextsConfig;
-        $this->generateCriticalJsAssets = $generateCriticalJsAssets;
+        $this->saveContextsConfig = $saveContextsConfig;
+        $this->genCritJsAssets = $genCritJsAssets;
     }
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD)
      */
-    public function execute($fullActionName, $pathInfo, $bundle, $critical = false, $config = null, $area = null, $theme = null, $locale = null)
-    {
+    public function execute(
+        $fullActionName,
+        $pathInfo,
+        $bundle,
+        $critical = false,
+        $config = null,
+        $area = null,
+        $theme = null,
+        $locale = null
+    ) {
         if (!$this->configHelper->canCollectBundleJsInAction()) {
             return [
                 'success' => false
@@ -67,10 +77,10 @@ class SaveBundleByPage implements SaveBundleByPageInterface
         }
 
         if ($config !== '-1' && $area && $theme && $locale) {
-            $this->actionSaveContextsConfig->execute($config);
-            $this->generateCriticalJsAssets->execute($area, $theme, $locale, true);
+            $this->saveContextsConfig->execute($config);
+            $this->genCritJsAssets->execute($area, $theme, $locale, true);
         }
 
-        return $this->actionSaveBundleByPage->execute($fullActionName, $pathInfo, $bundle, $critical);
+        return $this->saveBundleByPage->execute($fullActionName, $pathInfo, $bundle, $critical);
     }
 }

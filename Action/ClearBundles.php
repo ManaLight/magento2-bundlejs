@@ -28,33 +28,36 @@ class ClearBundles
     /**
      * @var BundleByPageCollectionFactory
      */
-    private $bundleByPageCollectionFactory;
+    private $bundleByPage;
 
     /**
      * @var BundleByTypeCollectionFactory
      */
-    private $bundleByTypeCollectionFactory;
+    private $bundleByType;
 
     /**
      * ClearBundles constructor.
+     *
      * @param ResourceBundleByPage $resourceBundleByPage
      * @param ResourceBundleByType $resourceBundleByType
-     * @param BundleByPageCollectionFactory $bundleByPageCollectionFactory
-     * @param BundleByTypeCollectionFactory $bundleByTypeCollectionFactory
+     * @param BundleByPageCollectionFactory $bundleByPage
+     * @param BundleByTypeCollectionFactory $bundleByType
      */
     public function __construct(
         ResourceBundleByPage $resourceBundleByPage,
         ResourceBundleByType $resourceBundleByType,
-        BundleByPageCollectionFactory $bundleByPageCollectionFactory,
-        BundleByTypeCollectionFactory $bundleByTypeCollectionFactory
+        BundleByPageCollectionFactory $bundleByPage,
+        BundleByTypeCollectionFactory $bundleByType
     ) {
         $this->resourceBundleByPage = $resourceBundleByPage;
         $this->resourceBundleByType = $resourceBundleByType;
-        $this->bundleByPageCollectionFactory = $bundleByPageCollectionFactory;
-        $this->bundleByTypeCollectionFactory = $bundleByTypeCollectionFactory;
+        $this->bundleByPage = $bundleByPage;
+        $this->bundleByType = $bundleByType;
     }
 
     /**
+     * Execute.
+     *
      * @return bool
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
@@ -66,12 +69,14 @@ class ClearBundles
     }
 
     /**
+     * Clear Bundle By Pages.
+     *
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function clearBundleByPages()
     {
         /** @var \PureMashiro\BundleJs\Model\ResourceModel\BundleByPage\Collection $collection */
-        $collection = $this->bundleByPageCollectionFactory->create();
+        $collection = $this->bundleByPage->create();
         if ($collection->getSize()) {
             foreach ($collection as $bundle) {
                 $bundle->setBundle(null);
@@ -81,12 +86,14 @@ class ClearBundles
     }
 
     /**
+     * Clear Bundle By Types.
+     *
      * @throws \Magento\Framework\Exception\AlreadyExistsException
      */
     public function clearBundleByTypes()
     {
         /** @var \PureMashiro\BundleJs\Model\ResourceModel\BundleByType\Collection $collection */
-        $collection = $this->bundleByTypeCollectionFactory->create();
+        $collection = $this->bundleByType->create();
         if ($collection->getSize()) {
             foreach ($collection as $bundle) {
                 $bundle->setBundle(null);
