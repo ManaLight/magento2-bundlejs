@@ -18,7 +18,7 @@
             "PureMashiro\\BundleJs\\": ""
         }
     },
-    "version": "1.3.3",
+    "version": "1.3.4-alpha1",
     "require": {
         "magento/framework": "~102|~103",
         "rosell-dk/dom-util-for-webp": "*"
