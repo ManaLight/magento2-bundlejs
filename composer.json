@@ -18,8 +18,38 @@
             "PureMashiro\\BundleJs\\": ""
         }
     },
-    "version": "1.3.3",
+    "version": "1.3.4",
     "require": {
+        "magento/framework": "~102|~103",
         "rosell-dk/dom-util-for-webp": "*"
+    },
+    "require-dev": {
+        "magento/magento-coding-standard": "*",
+        "phpmd/phpmd": "^2.13",
+        "phpstan/extension-installer": "^1.2",
+        "phpstan/phpstan": "^1.6.8",
+        "phpunit/phpunit": "^9.0"
+    },
+    "scripts": {
+        "post-install-cmd": "vendor/bin/phpcs --config-set installed_paths ../../..,../../phpcompatibility/php-compatibility/PHPCompatibility",
+        "post-update-cmd": "vendor/bin/phpcs --config-set installed_paths ../../..,../../phpcompatibility/php-compatibility/PHPCompatibility"
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev",
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://repo.magento.com/"
+        },
+        {
+            "type": "composer",
+            "url": "https://repo-magento-mirror.fooman.co.nz/"
+        }
+    ],
+    "config": {
+        "allow-plugins": {
+            "magento/composer-dependency-version-audit-plugin": false,
+            "phpstan/extension-installer": true
+        }
     }
 }

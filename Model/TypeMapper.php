@@ -25,6 +25,7 @@ class TypeMapper
         self::CHECKOUT_CART_INDEX => BundleByType::TYPE_CART,
         self::CHECKOUT_INDEX_INDEX => BundleByType::TYPE_CHECKOUT
     ];
+
     /**
      * @var ConfigHelper
      */
@@ -32,6 +33,7 @@ class TypeMapper
 
     /**
      * TypeMapper constructor.
+     *
      * @param ConfigHelper $configHelper
      */
     public function __construct(
@@ -41,8 +43,10 @@ class TypeMapper
     }
 
     /**
-     * @param $fullActionName
-     * @param $pathInfo
+     * Map.
+     *
+     * @param string $fullActionName
+     * @param string $pathInfo
      * @param bool $full
      * @return mixed|null
      */
@@ -69,6 +73,8 @@ class TypeMapper
     }
 
     /**
+     * Get Mapper.
+     *
      * @return array
      */
     public function getMapper()

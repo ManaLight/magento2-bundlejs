@@ -45,6 +45,8 @@ class BundleByType extends AbstractModel
     }
 
     /**
+     * Get Default Types.
+     *
      * @return string[]
      */
     public function getDefaultTypes()
