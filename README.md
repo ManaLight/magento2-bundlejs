@@ -14,6 +14,8 @@
 
 # External links
 
+[Demo Video](https://youtu.be/nTiZuwHTS-E)
+
 [Magento Marketplace](https://marketplace.magento.com/pure-mashiro-magento2-bundlejs.html)
 
 [User Guide](https://marketplace.magento.com/media/catalog/product/pure_mashiro-magento2-bundlejs-1-3-1-ce/user_guides.pdf)
