@@ -162,10 +162,25 @@ $manualCollect = $block->getManualCollectData();
 
             <?php if ($block->canAutoCollect()): ?>
             // Observer js Start
-            var collectBundleIsInProgress = false;
-            function observerHtml() {
-                var clockAutoCollect;
+            var collectBundleIsInProgress = false,
+                clockAutoCollect = null;
 
+            function collectBundle() {
+                if (clockAutoCollect) {
+                    clearTimeout(clockAutoCollect);
+                }
+
+                clockAutoCollect = setTimeout(function () {
+                    if (collectBundleIsInProgress) {
+                        return;
+                    }
+
+                    collectBundleIsInProgress = true;
+                    actionObj.collectBundleAction($.mage.cookies.get(phase) === phaseValue2);
+                }, 3000);
+            }
+
+            function observerHtml() {
                 // Select the node that will be observed for mutations
                 var targetNode = document.querySelector('html');
 
@@ -177,18 +192,7 @@ $manualCollect = $block->getManualCollectData();
                     // Use traditional 'for loops' for IE 11
                     for (const mutation of mutationsList) {
                         if (mutation.type === 'childList') {
-                            if (clockAutoCollect) {
-                                clearTimeout(clockAutoCollect);
-                            }
-
-                            clockAutoCollect = setTimeout(function () {
-                                if (collectBundleIsInProgress) {
-                                    return;
-                                }
-
-                                collectBundleIsInProgress = true;
-                                actionObj.collectBundleAction($.mage.cookies.get(phase) === phaseValue2);
-                            }, 3000);
+                            collectBundle();
                         }
                     }
                 };
@@ -198,6 +202,9 @@ $manualCollect = $block->getManualCollectData();
 
                 // Start observing the target node for configured mutations
                 observer.observe(targetNode, config);
+
+                // try collecting in case there is no mutation
+                collectBundle();
             }
             // Observer js End
 
