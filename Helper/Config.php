@@ -243,10 +243,10 @@ class Config
      */
     public function getCriticalDeps($type, $theme)
     {
+        $deps = (string)$this->getValue(sprintf('bundle_js/critical_js/deps_%s', $type));
+
         if (isset($this->criticalDepsByTheme[$theme][$type])) {
             $deps = $this->criticalDepsByTheme[$theme][$type];
-        } else {
-            $deps = (string)$this->getValue(sprintf('bundle_js/critical_js/deps_%s', $type));
         }
 
         return $deps ? array_unique(array_filter(array_map('trim', explode(',', $deps)))) : [];
@@ -302,6 +302,8 @@ class Config
      * Get Allowed Static Pages.
      *
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD)
      */
     public function getAllowedStaticPages()
     {

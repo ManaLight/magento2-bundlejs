@@ -42,7 +42,7 @@ class BundlePlugin
     /**
      * @var GenerateCriticalJsAssets
      */
-    private $generateCriticalJsAssets;
+    private $genCritJsAssets;
 
     /**
      * BundlePlugin constructor.
@@ -50,20 +50,20 @@ class BundlePlugin
      * @param BundleRegistry $bundleRegistry
      * @param TypeMapper $typeMapper
      * @param ConfigHelper $configHelper
-     * @param GenerateCriticalJsAssets $generateCriticalJsAssets
+     * @param GenerateCriticalJsAssets $genCritJsAssets
      */
     public function __construct(
         MashiroBundle $mashiroBundle,
         BundleRegistry $bundleRegistry,
         TypeMapper $typeMapper,
         ConfigHelper $configHelper,
-        GenerateCriticalJsAssets $generateCriticalJsAssets
+        GenerateCriticalJsAssets $genCritJsAssets
     ) {
         $this->mashiroBundle = $mashiroBundle;
         $this->bundleRegistry = $bundleRegistry;
         $this->typeMapper = $typeMapper;
         $this->configHelper = $configHelper;
-        $this->generateCriticalJsAssets = $generateCriticalJsAssets;
+        $this->genCritJsAssets = $genCritJsAssets;
     }
 
     /**
@@ -110,7 +110,7 @@ class BundlePlugin
         }
 
         // Generate critical js for each page type
-        $this->generateCriticalJsAssets->execute($area, $theme, $locale);
+        $this->genCritJsAssets->execute($area, $theme, $locale);
 
         return $result;
     }

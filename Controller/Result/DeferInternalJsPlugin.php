@@ -36,7 +36,7 @@ class DeferInternalJsPlugin
     /**
      * @var HelperDeferJsReplacer
      */
-    private $helperDeferJsReplacer;
+    private $helperDeferJs;
 
     /**
      * @var IsAllowedStaticPage
@@ -44,27 +44,30 @@ class DeferInternalJsPlugin
     private $isAllowedStaticPage;
 
     /**
+     * Construct.
+     *
      * @param ConfigHelper $configHelper
      * @param DeferJsReplacer $deferJsReplacer
      * @param DataObject $dataObject
-     * @param HelperDeferJsReplacer $helperDeferJsReplacer
+     * @param HelperDeferJsReplacer $helperDeferJs
+     * @param IsAllowedStaticPage $isAllowedStaticPage
      */
     public function __construct(
         ConfigHelper          $configHelper,
         DeferJsReplacer       $deferJsReplacer,
         DataObject            $dataObject,
-        HelperDeferJsReplacer $helperDeferJsReplacer,
+        HelperDeferJsReplacer $helperDeferJs,
         IsAllowedStaticPage   $isAllowedStaticPage
     ) {
         $this->configHelper = $configHelper;
         $this->deferJsReplacer = $deferJsReplacer;
         $this->dataObject = $dataObject;
-        $this->helperDeferJsReplacer = $helperDeferJsReplacer;
+        $this->helperDeferJs = $helperDeferJs;
         $this->isAllowedStaticPage = $isAllowedStaticPage;
     }
 
     /**
-     * After Render Result.
+     * Set After Render Result.
      *
      * @param Layout $subject
      * @param Layout $result
@@ -79,7 +82,7 @@ class DeferInternalJsPlugin
 
         if ($this->isAllowedStaticPage->validate($subject->getLayout())) {
             $content = (string)$httpResponse->getContent();
-            $this->dataObject->setHelperDeferJsReplacer($this->helperDeferJsReplacer);
+            $this->dataObject->setHelperDeferJsReplacer($this->helperDeferJs);
             $dom = $this->deferJsReplacer->replaceHtml($content, $this->dataObject);
             $httpResponse->setContent(is_string($dom) ? $dom : $dom->save());
         }

@@ -22,7 +22,7 @@ class GenerateCriticalJsAssets
     /**
      * @var DeploymentVersionStorage
      */
-    private $deploymentVersionStorage;
+    private $deployVersionStorage;
 
     /**
      * @var IoFile
@@ -42,7 +42,7 @@ class GenerateCriticalJsAssets
     /**
      * @var ContextsConfigCollectionFactory
      */
-    private $contextsConfigCollectionFactory;
+    private $contextsConfig;
 
     /**
      * @var ConfigHelper
@@ -65,32 +65,32 @@ class GenerateCriticalJsAssets
     private $minifyAdapter;
 
     /**
-     * @param DeploymentVersionStorage $deploymentVersionStorage
+     * @param DeploymentVersionStorage $deployVersionStorage
      * @param IoFile $ioFile
      * @param BundleJsHelper $bundleJsHelper
      * @param FileWriteFactory $fileWriteFactory
-     * @param ContextsConfigCollectionFactory $contextsConfigCollectionFactory
+     * @param ContextsConfigCollectionFactory $contextsConfig
      * @param ConfigHelper $configHelper
      * @param FileDriver $fileDriver
      * @param Minification $minification
      * @param MinifyAdapter $minifyAdapter
      */
     public function __construct(
-        DeploymentVersionStorage        $deploymentVersionStorage,
+        DeploymentVersionStorage        $deployVersionStorage,
         IoFile                          $ioFile,
         BundleJsHelper                  $bundleJsHelper,
         FileWriteFactory                $fileWriteFactory,
-        ContextsConfigCollectionFactory $contextsConfigCollectionFactory,
+        ContextsConfigCollectionFactory $contextsConfig,
         ConfigHelper                    $configHelper,
         FileDriver                      $fileDriver,
         Minification                    $minification,
         MinifyAdapter                   $minifyAdapter
     ) {
-        $this->deploymentVersionStorage = $deploymentVersionStorage;
+        $this->deployVersionStorage = $deployVersionStorage;
         $this->ioFile = $ioFile;
         $this->bundleJsHelper = $bundleJsHelper;
         $this->fileWriteFactory = $fileWriteFactory;
-        $this->contextsConfigCollectionFactory = $contextsConfigCollectionFactory;
+        $this->contextsConfig = $contextsConfig;
         $this->configHelper = $configHelper;
         $this->fileDriver = $fileDriver;
         $this->minification = $minification;
@@ -106,6 +106,8 @@ class GenerateCriticalJsAssets
      * @param bool   $media
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
+     *
+     * @SuppressWarnings(PHPMD)
      */
     public function execute($area, $theme, $locale, $media = false)
     {
@@ -160,16 +162,18 @@ JS;
      * @param bool      $media
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
+     *
+     * @SuppressWarnings(PHPMD)
      */
     public function generateContextsConfigJs($area, $theme, $locale, $media = false)
     {
         $filePath = 'contexts_config.min.js';
         $destination = $this->getFileDestination($media, $area, $theme, $locale, $filePath);
-        $js = $this->getContextsConfigJsContent();
-        if ($js && $this->minification->isEnabled('js')) {
-            $js = $this->minifyAdapter->minify($js);
+        $javascript = $this->getContextsConfigJsContent();
+        if ($javascript && $this->minification->isEnabled('js')) {
+            $javascript = $this->minifyAdapter->minify($javascript);
         }
-        $this->writeFile($destination, $js);
+        $this->writeFile($destination, $javascript);
     }
 
     /**
@@ -181,6 +185,8 @@ JS;
      * @param bool      $media
      * @throws \Magento\Framework\Exception\FileSystemException
      * @throws \Magento\Framework\Exception\LocalizedException
+     *
+     * @SuppressWarnings(PHPMD)
      */
     public function generateCriticalDepsJs($area, $theme, $locale, $media = false)
     {
@@ -189,14 +195,16 @@ JS;
         foreach ($types as $type) {
             $filePath = "critical_$type.min.js";
             $destination = $this->getFileDestination($media, $area, $theme, $locale, $filePath);
-            $js = $this->addCriticalDependencies($type, $theme);
+            $javascript = $this->addCriticalDependencies($type, $theme);
 
-            if ($js) {
+            if ($javascript) {
                 if ($this->minification->isEnabled('js')) {
-                    $js = $this->minifyAdapter->minify($js);
+                    $javascript = $this->minifyAdapter->minify($javascript);
                 }
-                $this->writeFile($destination, $js);
-            } else {
+                $this->writeFile($destination, $javascript);
+            }
+
+            if (!$javascript) {
                 if ($this->fileDriver->isExists($destination)) {
                     $this->fileDriver->deleteFile($destination);
                 }
@@ -218,7 +226,7 @@ JS;
     public function getFileDestination($media, $area, $theme, $locale, string $filePath): string
     {
         if ($media) {
-            $deploymentVersion = $this->deploymentVersionStorage->load();
+            $deploymentVersion = $this->deployVersionStorage->load();
             $destinationDir = sprintf('%s/%s/%s/mashiro/critical/%s', $area, $theme, $locale, $deploymentVersion);
 
             $this->ioFile->checkAndCreateFolder(
@@ -226,10 +234,13 @@ JS;
             );
             $destinationPath = $destinationDir . '/' . $filePath;
             $destination = $this->bundleJsHelper->getPubMediaDir()->getAbsolutePath($destinationPath);
-        } else {
-            $destinationPath = $area . '/' . $theme . '/' . $locale . '/' . 'mashiro' . '/' . $filePath;
+        }
+
+        if (!$media) {
+            $destinationPath = sprintf('%s/%s/%s/mashiro/%s', $area, $theme, $locale, $filePath);
             $destination = $this->bundleJsHelper->getPubStaticDir()->getAbsolutePath($destinationPath);
         }
+
         return $destination;
     }
 
@@ -237,17 +248,17 @@ JS;
      * Write File.
      *
      * @param string $destination
-     * @param string $js
+     * @param string $javascript
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    private function writeFile(string $destination, string $js): void
+    private function writeFile(string $destination, string $javascript): void
     {
         $file = $this->fileWriteFactory->create(
             $destination,
             DriverPool::FILE,
             'w'
         );
-        $file->write($js);
+        $file->write($javascript);
         $file->close();
     }
 
@@ -259,10 +270,10 @@ JS;
     private function getContextsConfigJsContent(): string
     {
         /** @var \PureMashiro\BundleJs\Model\ResourceModel\ContextsConfig\Collection $collection */
-        $collection = $this->contextsConfigCollectionFactory->create();
+        $collection = $this->contextsConfig->create();
         $contextsConfig = $collection->getFirstItem();
         $config = $contextsConfig->getConfig();
-        $js = <<<JS
+        $javascript = <<<JS
 var contextsConfig = {$config};
 if (requirejs.s.contexts._.config['baseUrl']) {
     contextsConfig['baseUrl'] = requirejs.s.contexts._.config['baseUrl'];
@@ -275,7 +286,7 @@ if (requirejs.s.contexts._.config.config['text']) {
 }
 Object.assign(requirejs.s.contexts._.config, contextsConfig)
 JS;
-        return $js;
+        return $javascript;
     }
 
     /**
@@ -293,11 +304,11 @@ JS;
     {
         $filePath = 'allowed_components.min.js';
         $destination = $this->getFileDestination($media, $area, $theme, $locale, $filePath);
-        $js = $this->getAllowedComponentsJsContent();
-        if ($js && $this->minification->isEnabled('js')) {
-            $js = $this->minifyAdapter->minify($js);
+        $javascript = $this->getAllowedComponentsJsContent();
+        if ($javascript && $this->minification->isEnabled('js')) {
+            $javascript = $this->minifyAdapter->minify($javascript);
         }
-        $this->writeFile($destination, $js);
+        $this->writeFile($destination, $javascript);
     }
 
     /**

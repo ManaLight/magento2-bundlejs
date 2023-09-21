@@ -35,7 +35,7 @@ class BundleJs extends Template
     /**
      * @var BundleByTypeCollectionFactory
      */
-    private $bundleByTypeCollectionFactory;
+    private $bundleByType;
 
     /**
      * @var Design
@@ -47,7 +47,7 @@ class BundleJs extends Template
      * @param Template\Context $context
      * @param TypeMapper $typeMapper
      * @param ConfigHelper $configHelper
-     * @param BundleByTypeCollectionFactory $bundleByTypeCollectionFactory
+     * @param BundleByTypeCollectionFactory $bundleByType
      * @param Design $design
      * @param array $data
      */
@@ -55,14 +55,14 @@ class BundleJs extends Template
         Template\Context $context,
         TypeMapper $typeMapper,
         ConfigHelper $configHelper,
-        BundleByTypeCollectionFactory $bundleByTypeCollectionFactory,
+        BundleByTypeCollectionFactory $bundleByType,
         Design $design,
         array $data = []
     ) {
         parent::__construct($context, $data);
         $this->typeMapper = $typeMapper;
         $this->configHelper = $configHelper;
-        $this->bundleByTypeCollectionFactory = $bundleByTypeCollectionFactory;
+        $this->bundleByType = $bundleByType;
         $this->design = $design;
     }
 
@@ -126,7 +126,7 @@ class BundleJs extends Template
     public function getAllBundleTypes()
     {
         /** @var \PureMashiro\BundleJs\Model\ResourceModel\BundleByType\Collection $collection */
-        $collection = $this->bundleByTypeCollectionFactory->create();
+        $collection = $this->bundleByType->create();
         $collection->addFieldToFilter('type', ['neq' => ModelBundleByType::TYPE_COMMON]);
         $collection->getSelect()->joinLeft(
             ['page' => $collection->getTable(ResourceBundleByPage::TABLE_NAME_BUNDLE_BY_PAGE)],
@@ -145,7 +145,7 @@ class BundleJs extends Template
     public function isCommonExist(): bool
     {
         /** @var \PureMashiro\BundleJs\Model\ResourceModel\BundleByType\Collection $collection */
-        $collection = $this->bundleByTypeCollectionFactory->create();
+        $collection = $this->bundleByType->create();
         $collection->addFieldToFilter('type', ModelBundleByType::TYPE_COMMON);
 
         if (!$collection->getSize()) {
@@ -181,7 +181,9 @@ class BundleJs extends Template
         foreach ($types as $type) {
             if ($hasEmptyBundlePage) {
                 continue;
-            } else {
+            }
+
+            if (!$hasEmptyBundlePage) {
                 if (empty($type->getPageBundle())) {
                     $hasEmptyBundlePage = true;
                 }

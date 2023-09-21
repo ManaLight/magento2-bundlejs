@@ -47,8 +47,12 @@ class TypeMapper
      *
      * @param string $fullActionName
      * @param string $pathInfo
-     * @param bool $full
+     * @param bool   $full
      * @return mixed|null
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD)
+     * @TODO: refactor into new functions to reduce the complexity of this one.
      */
     public function map($fullActionName, $pathInfo, $full = false)
     {
@@ -86,7 +90,9 @@ class TypeMapper
             $configPath = $this->configHelper->getAutoCollectPath($type);
             if (!empty($configPath)) {
                 $mapper[$configPath] = $type;
-            } else {
+            }
+
+            if (empty($configPath)) {
                 $key = array_search($type, self::MAPPER);
                 if (empty($key)) {
                     continue;

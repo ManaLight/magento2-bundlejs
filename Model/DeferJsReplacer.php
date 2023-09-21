@@ -4,7 +4,7 @@ namespace PureMashiro\BundleJs\Model;
 
 use KubAT\PhpSimple\HtmlDomParser;
 use PureMashiro\BundleJs\Helper\DeferJsReplacer as HelperDeferJsReplacer;
-use PureMashiro\BundleJs\Source\Js as SourceJs;
+use PureMashiro\BundleJs\Source\SourceJs;
 
 defined('MAX_FILE_SIZE') || define('MAX_FILE_SIZE', 1000000);
 
@@ -16,6 +16,12 @@ class DeferJsReplacer extends \DOMUtilForWebP\ImageUrlReplacer
      * @param string $html
      * @param mixed|null $storage
      * @return mixed|string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.StaticAccess)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
+     * @TODO: this function really needs some serious attention.
      */
     public function replaceHtml($html, $storage = null)
     {
@@ -45,10 +51,10 @@ class DeferJsReplacer extends \DOMUtilForWebP\ImageUrlReplacer
                 "\n" . $html;
         }
 
-        /** @var HelperDeferJsReplacer $helperDeferJsReplacer */
-        $helperDeferJsReplacer = $storage->getHelperDeferJsReplacer();
-        $innerExclusion = $this->getDeferInnerExclusion($helperDeferJsReplacer);
-        $outerExclusion = $this->getDeferOuterExclusion($helperDeferJsReplacer);
+        /** @var HelperDeferJsReplacer $helperDeferJs */
+        $helperDeferJs = $storage->getHelperDeferJsReplacer();
+        $innerExclusion = $this->getDeferInnerExclusion($helperDeferJs);
+        $outerExclusion = $this->getDeferOuterExclusion($helperDeferJs);
 
         foreach (['script'] as $tagName) {
             $elems = $dom->find($tagName);
@@ -60,11 +66,14 @@ class DeferJsReplacer extends \DOMUtilForWebP\ImageUrlReplacer
                 }
 
                 $innerText = $elem->innertext();
+
                 if ($innerText) {
                     if (!$this->canNotDeferInner($innerText, $innerExclusion)) {
                         $elem->setAttribute('type', 'deferInner/javascript');
                     }
-                } else {
+                }
+
+                if (!$innerText) {
                     if (!$this->canNotDeferOuter($elem, $outerExclusion)) {
                         $elem->setAttribute('type', 'deferOuter/javascript');
                     }
@@ -74,7 +83,7 @@ class DeferJsReplacer extends \DOMUtilForWebP\ImageUrlReplacer
 
         $this->addDeferOuterJS($dom);
 
-        $helperDeferJsReplacer->getAddRequireJsContextsConfigAction()->execute($dom);
+        $helperDeferJs->getAddRequireJsContextsConfigAction()->execute($dom);
 
         $storage->setDomContent($dom);
 
@@ -117,12 +126,12 @@ class DeferJsReplacer extends \DOMUtilForWebP\ImageUrlReplacer
     /**
      * Get Defer Inner Exclusion.
      *
-     * @param HelperDeferJsReplacer $helperDeferJsReplacer
+     * @param HelperDeferJsReplacer $helperDeferJs
      * @return array|string[]
      */
-    private function getDeferInnerExclusion($helperDeferJsReplacer)
+    private function getDeferInnerExclusion($helperDeferJs)
     {
-        return $helperDeferJsReplacer->getExcludedInternalScripts();
+        return $helperDeferJs->getExcludedInternalScripts();
     }
 
     /**
@@ -151,11 +160,11 @@ class DeferJsReplacer extends \DOMUtilForWebP\ImageUrlReplacer
     /**
      * Get defer outer exclusion.
      *
-     * @param HelperDeferJsReplacer $helperDeferJsReplacer
+     * @param HelperDeferJsReplacer $helperDeferJs
      * @return array|string[]
      */
-    private function getDeferOuterExclusion(HelperDeferJsReplacer $helperDeferJsReplacer)
+    private function getDeferOuterExclusion(HelperDeferJsReplacer $helperDeferJs)
     {
-        return $helperDeferJsReplacer->getExcludedExternalScripts();
+        return $helperDeferJs->getExcludedExternalScripts();
     }
 }
